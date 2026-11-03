@@ -33,14 +33,42 @@ final class Snapshot
     ) {
     }
 
-    /** @return array<string, array<string, mixed>> */
+    /**
+     * Users shown in lists: not hidden and, with display.registered_users_only,
+     * logged in to an account.
+     * @return array<string, array<string, mixed>>
+     */
     public function visibleUsers(): array
+    {
+        return array_filter($this->users, static fn (array $u): bool => $u['listed'] ?? !$u['hidden']);
+    }
+
+    /**
+     * Users that count: everyone except services clients and users on hidden
+     * servers, whether or not they are listed.
+     * @return array<string, array<string, mixed>>
+     */
+    public function countedUsers(): array
     {
         return array_filter($this->users, static fn (array $u): bool => !$u['hidden']);
     }
 
-    /** @return array<string, array<string, mixed>> */
+    /**
+     * Channels shown in lists: not hidden and, with
+     * display.registered_channels_only, registered with ChanServ.
+     * @return array<string, array<string, mixed>>
+     */
     public function visibleChannels(): array
+    {
+        return array_filter($this->channels, static fn (array $c): bool => $c['listed'] ?? !$c['hidden']);
+    }
+
+    /**
+     * Channels that count: everything except hidden ones (secret, private or
+     * configured as hidden), whether or not they are listed.
+     * @return array<string, array<string, mixed>>
+     */
+    public function countedChannels(): array
     {
         return array_filter($this->channels, static fn (array $c): bool => !$c['hidden']);
     }
@@ -61,8 +89,8 @@ final class Snapshot
     public function counts(): array
     {
         return [
-            'users' => count($this->visibleUsers()),
-            'channels' => count($this->visibleChannels()),
+            'users' => count($this->countedUsers()),
+            'channels' => count($this->countedChannels()),
             'servers' => count($this->visibleServers()),
             'operators' => count($this->operators()),
         ];
@@ -100,7 +128,7 @@ final class Snapshot
         foreach ($channel['users'] as $entry) {
             [$prefixes, $nick] = self::splitPrefix($entry);
             $user = $this->user($nick);
-            if ($user === null || $user['hidden']) {
+            if ($user === null || !($user['listed'] ?? !$user['hidden'])) {
                 continue;
             }
             $members[] = ['nick' => $nick, 'prefixes' => $prefixes, 'user' => $user];
@@ -122,7 +150,7 @@ final class Snapshot
         foreach ($user['channels'] as $entry) {
             [$prefixes, $name] = self::splitPrefix($entry);
             $channel = $this->channel($name);
-            if ($channel === null || $channel['hidden']) {
+            if ($channel === null || !($channel['listed'] ?? !$channel['hidden'])) {
                 continue;
             }
             $result[] = ['name' => $name, 'prefixes' => $prefixes, 'channel' => $channel];

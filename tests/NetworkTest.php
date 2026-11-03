@@ -21,13 +21,14 @@ final class NetworkTest extends TestCase
         ];
         $users = [
             'Alice' => ['server' => 'irc.example.org', 'modes' => ['+xio'], 'channels' => ['@~#chat', '#secret'], 'address' => '203.0.113.5', 'account' => ['display' => 'Alice']],
-            'Bob' => ['server' => 'irc.example.org', 'modes' => ['+x'], 'channels' => ['#chat', '+#services'], 'address' => '203.0.113.6', 'account' => null],
+            'Bob' => ['server' => 'irc.example.org', 'modes' => ['+x'], 'channels' => ['#chat', '+#services', '#lounge'], 'address' => '203.0.113.6', 'account' => null],
             'ChanServ' => ['server' => 'services.example.org', 'modes' => ['+io'], 'channels' => ['@&#chat', '#services'], 'address' => '0.0.0.0', 'account' => null],
         ];
         $channels = [
             '#chat' => ['modes' => ['+nt', '+l 20'], 'users' => ['@~Alice', 'Bob', '@&ChanServ'], 'topic' => null, 'created' => 1, 'registered' => true],
             '#secret' => ['modes' => ['+nts'], 'users' => ['Alice'], 'topic' => null, 'created' => 1, 'registered' => false],
             '#services' => ['modes' => ['+nt'], 'users' => ['+Bob', 'ChanServ'], 'topic' => null, 'created' => 1, 'registered' => false],
+            '#lounge' => ['modes' => ['+nt'], 'users' => ['Bob'], 'topic' => null, 'created' => 1, 'registered' => false],
         ];
         return [$users, $channels, $servers];
     }
@@ -47,13 +48,21 @@ final class NetworkTest extends TestCase
         [$users, $channels, $servers] = $this->fixture();
         $s = (new Network(new RpcClient('http://127.0.0.1:1/', ''), Config::fromArray([])))->build(100, $users, $channels, $servers);
 
-        self::assertFalse($s->channel('#chat')['hidden'], 'registered channel stays');
-        self::assertTrue($s->channel('#secret')['hidden']);
-        self::assertTrue($s->channel('#services')['hidden'], 'unregistered channel hidden');
-        self::assertFalse($s->user('alice')['hidden'], 'logged-in user stays');
-        self::assertTrue($s->user('bob')['hidden'], 'user without account hidden');
-        self::assertSame(['users' => 1, 'channels' => 1, 'servers' => 1, 'operators' => 1], $s->counts());
-        self::assertSame(1, $s->channel('#chat')['usercount'], 'hidden users do not count as members');
+        self::assertTrue($s->channel('#chat')['listed'], 'registered channel is listed');
+        self::assertTrue($s->channel('#secret')['hidden'], 'secret channel is hidden outright');
+        self::assertTrue($s->channel('#services')['hidden'], 'listed in display.hide_channels by default');
+        self::assertFalse($s->channel('#lounge')['listed'], 'unregistered channel is not listed');
+        self::assertFalse($s->channel('#lounge')['hidden'], 'but still counts');
+        self::assertSame(['#chat'], array_keys($s->visibleChannels()));
+        self::assertSame(['#chat'], array_column($s->userChannels('Bob'), 'name'), 'user channel list shows listed channels only');
+        self::assertTrue($s->user('alice')['listed'], 'logged-in user is listed');
+        self::assertFalse($s->user('bob')['listed'], 'user without account is not listed');
+        self::assertFalse($s->user('bob')['hidden'], 'but still counts');
+        self::assertSame(['users' => 2, 'channels' => 2, 'servers' => 1, 'operators' => 1], $s->counts(), 'counts include the unregistered channel and user');
+        self::assertSame(['alice'], array_keys($s->visibleUsers()));
+        self::assertSame(2, $s->channel('#chat')['usercount'], 'channel size counts unlisted users');
+        self::assertSame(['Alice'], array_column($s->channelMembers('#chat'), 'nick'), 'member list shows listed users only');
+        self::assertSame(2, $s->server('irc.example.org')['usercount']);
     }
 
     public function testFiltersUlinedServersAndTheirUsers(): void
@@ -61,7 +70,7 @@ final class NetworkTest extends TestCase
         [$users, $channels, $servers] = $this->fixture();
         $s = $this->network()->build(100, $users, $channels, $servers);
 
-        self::assertSame(['users' => 2, 'channels' => 1, 'servers' => 1, 'operators' => 1], $s->counts());
+        self::assertSame(['users' => 2, 'channels' => 2, 'servers' => 1, 'operators' => 1], $s->counts());
         self::assertTrue($s->user('chanserv')['hidden']);
         self::assertTrue($s->user('chanserv')['ulined']);
         self::assertTrue($s->server('services.example.org')['hidden']);

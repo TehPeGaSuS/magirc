@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>{{ 'Channels'|t }}</h1>
-<p class="lead">{{ _n('%s public channel right now.', '%s public channels right now.', channels|length)|format(channels|length|format_number) }}</p>
+<p class="lead">{% if cfg.display.registered_channels_only %}{{ _n('%s registered channel, %s public channels in total.', '%s registered channels, %s public channels in total.', channels|length)|format(channels|length|format_number, total|format_number) }}{% else %}{{ _n('%s public channel right now.', '%s public channels right now.', channels|length)|format(channels|length|format_number) }}{% endif %}</p>
 <p><label for="filter" class="visually-hidden">{{ 'Filter channels'|t }}</label><input id="filter" class="filter" type="search" placeholder="{{ 'Filter by name or topic'|t }}" data-filter-table="#channels"></p>
 <table id="channels" class="table table--sortable">
   <thead><tr>

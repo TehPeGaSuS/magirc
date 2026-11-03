@@ -86,9 +86,10 @@ final class Network
             $u['ulined'] = $srv[$serverKey]['ulined'] ?? false;
             $u['oper'] = self::hasMode($u['modes'] ?? [], 'o');
             $u['registered'] = is_array($u['account'] ?? null) && ($u['account']['display'] ?? '') !== '';
-            $u['hidden'] = ($u['ulined'] && $hideUlined)
-                || ($srv[$serverKey]['hidden'] ?? false)
-                || ($registeredUsers && !$u['registered']);
+            // hidden: never counted nor listed (services clients, hidden servers).
+            // listed: appears in user lists; counts include unlisted users too.
+            $u['hidden'] = ($u['ulined'] && $hideUlined) || ($srv[$serverKey]['hidden'] ?? false);
+            $u['listed'] = !$u['hidden'] && (!$registeredUsers || $u['registered']);
             $u['channels'] = is_array($u['channels'] ?? null) ? $u['channels'] : [];
             $u['modes'] = is_array($u['modes'] ?? null) ? $u['modes'] : [];
             $usr[$key] = $u;
@@ -107,8 +108,9 @@ final class Network
             $c['modes'] = is_array($c['modes'] ?? null) ? $c['modes'] : [];
             $c['users'] = is_array($c['users'] ?? null) ? $c['users'] : [];
             $c['registered'] = (bool) ($c['registered'] ?? false);
+            // hidden: never counted nor listed. listed: shown in channel lists;
+            // counts include unlisted (unregistered) channels too.
             $c['hidden'] = in_array($key, $hiddenChannels, true)
-                || ($registeredChannels && !$c['registered'])
                 || ($hideSecret && self::hasMode($c['modes'], 's'))
                 || ($hidePrivate && self::hasMode($c['modes'], 'p'));
             $count = 0;
@@ -120,6 +122,7 @@ final class Network
                 }
             }
             $c['usercount'] = $count;
+            $c['listed'] = !$c['hidden'] && (!$registeredChannels || $c['registered']);
             $chn[$key] = $c;
         }
 

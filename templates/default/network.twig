@@ -3,7 +3,7 @@
 {% block content %}
 <section class="hero">
   <div class="hero__figure">
-    <p class="hero__number"><span class="num">{{ counts.users|format_number }}</span> <span class="hero__label">{% if cfg.display.registered_users_only %}{{ _n('registered user online', 'registered users online', counts.users) }}{% else %}{{ _n('user online', 'users online', counts.users) }}{% endif %}</span></p>
+    <p class="hero__number"><span class="num">{{ counts.users|format_number }}</span> <span class="hero__label">{{ _n('user online', 'users online', counts.users) }}</span></p>
     <p class="muted">
       {% if peaks.users.count %}{{ 'Peak %s on %s'|t|format(peaks.users.count|format_number, peaks.users.time|datetime('j M Y, H:i')) }}{% endif %}
     </p>

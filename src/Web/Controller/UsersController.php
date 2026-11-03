@@ -14,6 +14,7 @@ final class UsersController extends Controller
         return $this->render($response, 'users.twig', [
             'title' => 'Users',
             'users' => $this->list(),
+            'total' => count($this->snapshot()->countedUsers()),
         ]);
     }
 

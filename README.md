@@ -11,7 +11,7 @@ MagIRC 2 is a rewrite of the PHP 5 era MagIRC 1.x. It reads live data from Anope
 
 * Network overview with the number of users online over the last 24 hours and 30 days, peaks, busiest channels and servers
 * Server, channel, user and operator pages, with sortable and filterable tables
-* Shows registered channels and users logged in to an account by default (Anope keeps no data about anything else); both rules can be switched off
+* Lists only registered channels and users logged in to an account by default (Anope keeps no data about anything else), while the counts still include everyone; both rules can be switched off
 * Countries of the users online (GeoLite2, optional)
 * Channel activity statistics from Anope's `chanstats` module (optional): lines, words, smileys, kicks, activity by hour of day, per channel and per account
 * JSON API for the live data and history

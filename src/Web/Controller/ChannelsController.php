@@ -14,6 +14,7 @@ final class ChannelsController extends Controller
         return $this->render($response, 'channels.twig', [
             'title' => 'Channels',
             'channels' => $this->list(),
+            'total' => count($this->snapshot()->countedChannels()),
         ]);
     }
 
@@ -23,7 +24,7 @@ final class ChannelsController extends Controller
         $name = self::channelName($args['channel']);
         $snapshot = $this->snapshot();
         $channel = $snapshot->channel($name);
-        if ($channel === null || $channel['hidden']) {
+        if ($channel === null || !($channel['listed'] ?? !$channel['hidden'])) {
             $this->notFound('There is no channel called "' . $name . '" right now.');
         }
         $members = $snapshot->channelMembers($name);

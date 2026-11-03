@@ -84,11 +84,12 @@ return [
         'home'      => 'status',
         // Show the MagIRC version in the footer.
         'show_version' => true,
-        // Only show channels registered with ChanServ and users logged in to
+        // Only list channels registered with ChanServ and users logged in to
         // a NickServ account. Anope keeps no data about anything else, so
         // unregistered channels and users are transient noise on a stats
-        // site. Counts follow the same rule: "users online" then means
-        // registered users online.
+        // site. These rules affect the lists and detail pages only: the
+        // counts ("users online", "channels", history, peaks, per-server and
+        // per-channel user counts) include everyone and every public channel.
         'registered_channels_only' => true,
         'registered_users_only'    => true,
         // Hide secret (+s) and private (+p) channels, and users on U-lined
