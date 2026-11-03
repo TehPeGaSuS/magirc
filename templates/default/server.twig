@@ -18,7 +18,7 @@
 {% if history|length > 1 %}
 <section>
   <h2>{{ 'Users this week'|t }}</h2>
-  <div class="chart chart--wide" data-chart="line" data-series="users" data-points="{{ chart_data(history) }}" role="img" aria-label="{{ 'Users on this server over the last 7 days'|t }}"></div>
+  <div class="chart chart--wide" data-chart="line" data-series="users" data-range="604800" data-points="{{ chart_data(history) }}" role="img" aria-label="{{ 'Users on this server over the last 7 days'|t }}"></div>
 </section>
 {% endif %}
 

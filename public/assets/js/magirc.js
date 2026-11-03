@@ -110,12 +110,21 @@
     var colors = [cssVar('--chart-1'), cssVar('--chart-2'), cssVar('--chart-3')];
     var opt = baseOption();
     opt.xAxis.type = 'time';
+    // Show the whole window the page promises (e.g. "last 24 hours") even
+    // when only part of it has samples yet.
+    var range = parseInt(el.getAttribute('data-range') || '0', 10);
+    var now = Math.floor(Date.now() / 1000);
+    if (range > 0) {
+      opt.xAxis.min = (now - range) * 1000;
+      opt.xAxis.max = now * 1000;
+    }
+    var span = range || (points.length ? (points[points.length - 1].time - points[0].time) : 0);
+    var lang = root.getAttribute('lang') || undefined;
+    opt.xAxis.axisLabel.hideOverlap = true;
     opt.xAxis.axisLabel.formatter = function (value) {
       var d = new Date(value);
-      var lang = root.getAttribute('lang') || undefined;
-      var span = points.length ? (points[points.length - 1].time - points[0].time) : 0;
       if (span > 3 * 86400) return d.toLocaleDateString(lang, { day: 'numeric', month: 'short' });
-      return d.toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' });
+      return d.toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit', hour12: false });
     };
     opt.yAxis.type = 'value';
     opt.legend = series.length > 1 ? { bottom: 0, textStyle: { color: cssVar('--muted') }, icon: 'roundRect' } : undefined;

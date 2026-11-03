@@ -10,7 +10,7 @@
   </div>
   <div class="hero__chart">
     {% if history.day|length > 1 %}
-      <div class="chart chart--hero" data-chart="line" data-series="users" data-points="{{ chart_data(history.day) }}" data-label="{{ 'Users online, last 24 hours'|t }}" role="img" aria-label="{{ 'Users online over the last 24 hours'|t }}"></div>
+      <div class="chart chart--hero" data-chart="line" data-series="users" data-range="86400" data-points="{{ chart_data(history.day) }}" data-label="{{ 'Users online, last 24 hours'|t }}" role="img" aria-label="{{ 'Users online over the last 24 hours'|t }}"></div>
     {% else %}
       <p class="empty">{{ 'No history yet. Run %s from cron every few minutes to start recording it.'|t|format('<code>php bin/magirc sample</code>')|raw }}</p>
     {% endif %}
@@ -64,7 +64,7 @@
 {% if history.week|length > 1 %}
 <section>
   <h2>{{ 'The last 30 days'|t }}</h2>
-  <div class="chart chart--wide" data-chart="line" data-series="users,channels" data-points="{{ chart_data(history.month) }}" data-label="{{ 'Users and channels, last 30 days'|t }}" role="img" aria-label="{{ 'Users and channels over the last 30 days'|t }}"></div>
+  <div class="chart chart--wide" data-chart="line" data-series="users,channels" data-range="2592000" data-points="{{ chart_data(history.month) }}" data-label="{{ 'Users and channels, last 30 days'|t }}" role="img" aria-label="{{ 'Users and channels over the last 30 days'|t }}"></div>
 </section>
 {% endif %}
 {% endblock %}
