@@ -14,7 +14,7 @@
   <div><dt>{{ 'Modes'|t }}</dt><dd class="mono">{{ channel.modes|irc_modes ?: '—' }}</dd></div>
   <div><dt>{{ 'Created'|t }}</dt><dd>{{ channel.created|datetime }} <span class="muted">({{ channel.created|ago }})</span></dd></div>
   <div><dt>{{ 'Registered'|t }}</dt><dd>{{ channel.registered ? 'yes'|t : 'no'|t }}</dd></div>
-  {% if cfg.network.webchat %}<div><dt>{{ 'Join'|t }}</dt><dd><a href="{{ cfg.network.webchat|replace({'%nick%': '', '%channel%': channel.name|url_encode}) }}">{{ 'Open in webchat'|t }}</a></dd></div>{% endif %}
+  {% if cfg.network.webchat %}<div><dt>{{ 'Join'|t }}</dt><dd><a href="{{ webchat_url(channel.name) }}">{{ 'Open in webchat'|t }}</a></dd></div>{% endif %}
 </dl>
 
 {% if has_stats %}

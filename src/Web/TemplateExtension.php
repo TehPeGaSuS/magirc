@@ -30,7 +30,41 @@ final class TemplateExtension extends AbstractExtension
             // Plain JSON; Twig's autoescaping turns it into a valid attribute value
             // (quotes become &quot;, which the browser decodes before JSON.parse).
             new TwigFunction('chart_data', fn (mixed $v): string => json_encode($v, JSON_THROW_ON_ERROR)),
+            new TwigFunction('webchat_url', [$this, 'webchatUrl']),
         ];
+    }
+
+    /**
+     * Fills the configured webchat URL template. Placeholders that stay empty
+     * are removed together with their query parameter, so a template such as
+     * https://chat.example.org/?join=%channel% gives https://chat.example.org/
+     * when there is no channel to join.
+     */
+    public function webchatUrl(?string $channel = null, ?string $nick = null): string
+    {
+        $template = $this->services->config->string('network.webchat');
+        if ($template === '') {
+            return '';
+        }
+        $url = strtr($template, [
+            '%channel%' => $channel !== null ? rawurlencode($channel) : '',
+            '%nick%' => $nick !== null ? rawurlencode($nick) : '',
+        ]);
+        // Drop query parameters left without a value ("?join=", "&nick=").
+        $parts = parse_url($url);
+        if (!isset($parts['query'])) {
+            return $url;
+        }
+        $kept = [];
+        foreach (explode('&', $parts['query']) as $pair) {
+            if ($pair === '' || str_ends_with($pair, '=')) {
+                continue;
+            }
+            $kept[] = $pair;
+        }
+        $base = strstr($url, '?', true) ?: $url;
+        $fragment = isset($parts['fragment']) ? '#' . $parts['fragment'] : '';
+        return $base . ($kept ? '?' . implode('&', $kept) : '') . $fragment;
     }
 
     public function getFilters(): array

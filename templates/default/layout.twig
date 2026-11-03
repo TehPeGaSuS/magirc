@@ -63,7 +63,7 @@
       {% elseif cfg.network.server %}
         {{ 'Connect:'|t }} <code>{{ cfg.network.server }}</code>
       {% endif %}
-      {% if cfg.network.webchat %} · <a href="{{ cfg.network.webchat|replace({'%nick%': '', '%channel%': ''}) }}">{{ 'Webchat'|t }}</a>{% endif %}
+      {% if cfg.network.webchat %} · <a href="{{ webchat_url() }}">{{ 'Webchat'|t }}</a>{% endif %}
     </p>
     <p class="muted">
       {% if snapshot_time is defined %}{{ 'Data from %s'|t|format(snapshot_time|ago) }} · {% endif %}
