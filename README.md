@@ -52,11 +52,7 @@ MagIRC 2 is a rewrite of the PHP 5 era MagIRC 1.x. It reads live data from Anope
 
    It verifies the configuration, the connection to Anope and the token's permissions, the history store, the chanstats database (including the MySQL event scheduler) and the GeoIP file, and tells you how to fix whatever is wrong.
 
-5. Point your web server at `public/`. With Apache, `public/.htaccess` already routes requests to `index.php`. For nginx:
-
-       location / {
-           try_files $uri /index.php$is_args$args;
-       }
+5. Point your web server at `public/`. `doc/WEBSERVER.md` has complete examples for Apache (PHP-FPM and mod_php), nginx and Caddy, including serving MagIRC under a sub-path. The short version: document root `public/`, every request that is not an existing file goes to `index.php` (Apache does this through the shipped `public/.htaccess`; nginx with `try_files $uri /index.php$is_args$args;`).
 
 6. Record history. The charts and the peaks come from samples MagIRC takes itself. Add to cron:
 
