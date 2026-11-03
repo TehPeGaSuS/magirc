@@ -93,6 +93,8 @@ MagIRC 2 is a new application; there is no in-place upgrade. Install it as above
 
 `doc/RPC-MAPPING.md` documents which rpc_data fields and chanstats columns each page uses. `tools/` holds the scripts used to test against a local Anope.
 
-## License
+## Credits and license
 
-GPL-3.0-or-later. MagIRC was created by Sebastian Vassiliou (h9k); version 2 is maintained by PeGaSuS.
+MagIRC was created by Sebastian Vassiliou (h9k) as a frontend for Denora and Anope 2.0; the 1.x code lives on at [h9k/magirc](https://github.com/h9k/magirc). Version 2 is a rewrite maintained by PeGaSuS in this repository, which was detached from the original fork network after the rewrite.
+
+GPL-3.0-or-later.
