@@ -1,0 +1,33 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<h1>{{ channel }} <span class="muted h-sub">{{ 'activity'|t }}</span></h1>
+{% if live %}<p class="lead">{{ _n('%s user in the channel right now.', '%s users in the channel right now.', live.usercount)|format(live.usercount) }} <a href="{{ url_for('channel', {channel: channel|trim('#', 'left')}) }}">{{ 'Channel page'|t }}</a></p>{% endif %}
+{% include '_period.twig' %}
+
+{% if totals %}
+<dl class="facts__list facts__list--compact">
+  <div><dt>{{ 'Lines'|t }}</dt><dd class="num">{{ totals.lines|format_number }}</dd></div>
+  <div><dt>{{ 'Words'|t }}</dt><dd class="num">{{ totals.words|format_number }}</dd></div>
+  <div><dt>{{ 'Actions'|t }}</dt><dd class="num">{{ totals.actions|format_number }}</dd></div>
+  <div><dt>{{ 'Smileys'|t }}</dt><dd class="num">{{ totals.smileys|format_number }}</dd></div>
+  <div><dt>{{ 'Kicks'|t }}</dt><dd class="num">{{ totals.kicks|format_number }}</dd></div>
+  <div><dt>{{ 'Topics'|t }}</dt><dd class="num">{{ totals.topics|format_number }}</dd></div>
+</dl>
+{% endif %}
+
+<section>
+  <h2>{{ 'By hour of day'|t }}</h2>
+  <div class="chart chart--wide" data-chart="bars" data-points="{{ chart_data(hourly) }}" role="img" aria-label="{{ 'Lines per hour of the day'|t }}"></div>
+  <p class="muted small">{{ 'Hours follow the clock of the services database server.'|t }}</p>
+</section>
+
+<section>
+  <h2>{{ 'Users'|t }}</h2>
+  {% if users %}
+    {% include '_activity_table.twig' with {rows: users, kind: 'account'} %}
+  {% else %}
+    <p class="empty">{{ 'No per-user statistics for this period.'|t }}</p>
+  {% endif %}
+</section>
+{% endblock %}

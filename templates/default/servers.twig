@@ -1,0 +1,25 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<h1>{{ 'Servers'|t }}</h1>
+<table class="table table--sortable">
+  <thead><tr>
+    <th>{{ 'Server'|t }}</th>
+    <th class="num" data-sort="desc">{{ 'Users'|t }}</th>
+    <th class="num">{{ 'Operators'|t }}</th>
+    <th>{{ 'Linked since'|t }}</th>
+    <th>{{ 'Status'|t }}</th>
+  </tr></thead>
+  <tbody>
+  {% for s in servers %}
+    <tr{% if not s.online %} class="muted"{% endif %}>
+      <td data-sort-value="{{ s.name }}"><a href="{{ url_for('server', {server: s.name}) }}">{{ s.name }}</a><br><span class="muted small">{{ s.description }}</span></td>
+      <td class="num" data-sort-value="{{ s.users }}">{{ s.users }}</td>
+      <td class="num" data-sort-value="{{ s.operators }}">{{ s.operators }}</td>
+      <td data-sort-value="{{ s.linked_since ?: s.last_seen }}">{% if s.online %}{{ s.linked_since ? s.linked_since|datetime : '' }}{% else %}{{ 'last seen %s'|t|format(s.last_seen|ago) }}{% endif %}</td>
+      <td>{% if s.online %}<span class="status status--on">{{ 'linked'|t }}</span>{% else %}<span class="status status--off">{{ 'offline'|t }}</span>{% endif %}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

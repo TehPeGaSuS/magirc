@@ -1,0 +1,121 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Magirc\Tests;
+
+use Magirc\Anope\Network;
+use Magirc\Anope\RpcClient;
+use Magirc\Anope\Snapshot;
+use Magirc\Config;
+use PHPUnit\Framework\TestCase;
+
+final class NetworkTest extends TestCase
+{
+    /** @return array{0: array<string, array<string, mixed>>, 1: array<string, array<string, mixed>>, 2: array<string, array<string, mixed>>} */
+    private function fixture(): array
+    {
+        $servers = [
+            'irc.example.org' => ['description' => 'Main', 'ulined' => false, 'sid' => '001', 'synced' => true, 'uplink' => 'services.example.org'],
+            'services.example.org' => ['description' => 'Services', 'ulined' => true, 'sid' => '00B', 'synced' => true, 'uplink' => null],
+        ];
+        $users = [
+            'Alice' => ['server' => 'irc.example.org', 'modes' => ['+xio'], 'channels' => ['@~#chat', '#secret'], 'address' => '203.0.113.5', 'account' => ['display' => 'Alice']],
+            'Bob' => ['server' => 'irc.example.org', 'modes' => ['+x'], 'channels' => ['#chat', '+#services'], 'address' => '203.0.113.6', 'account' => null],
+            'ChanServ' => ['server' => 'services.example.org', 'modes' => ['+io'], 'channels' => ['@&#chat', '#services'], 'address' => '0.0.0.0', 'account' => null],
+        ];
+        $channels = [
+            '#chat' => ['modes' => ['+nt', '+l 20'], 'users' => ['@~Alice', 'Bob', '@&ChanServ'], 'topic' => null, 'created' => 1, 'registered' => true],
+            '#secret' => ['modes' => ['+nts'], 'users' => ['Alice'], 'topic' => null, 'created' => 1, 'registered' => false],
+            '#services' => ['modes' => ['+nt'], 'users' => ['+Bob', 'ChanServ'], 'topic' => null, 'created' => 1, 'registered' => false],
+        ];
+        return [$users, $channels, $servers];
+    }
+
+    /** The fixture tests filtering rules one at a time, so the registered-only rules are off unless a test turns them on. */
+    private function network(array $overrides = []): Network
+    {
+        $config = Config::fromArray(array_replace_recursive(
+            ['display' => ['registered_channels_only' => false, 'registered_users_only' => false]],
+            $overrides,
+        ));
+        return new Network(new RpcClient('http://127.0.0.1:1/', ''), $config);
+    }
+
+    public function testRegisteredOnlyIsTheDefault(): void
+    {
+        [$users, $channels, $servers] = $this->fixture();
+        $s = (new Network(new RpcClient('http://127.0.0.1:1/', ''), Config::fromArray([])))->build(100, $users, $channels, $servers);
+
+        self::assertFalse($s->channel('#chat')['hidden'], 'registered channel stays');
+        self::assertTrue($s->channel('#secret')['hidden']);
+        self::assertTrue($s->channel('#services')['hidden'], 'unregistered channel hidden');
+        self::assertFalse($s->user('alice')['hidden'], 'logged-in user stays');
+        self::assertTrue($s->user('bob')['hidden'], 'user without account hidden');
+        self::assertSame(['users' => 1, 'channels' => 1, 'servers' => 1, 'operators' => 1], $s->counts());
+        self::assertSame(1, $s->channel('#chat')['usercount'], 'hidden users do not count as members');
+    }
+
+    public function testFiltersUlinedServersAndTheirUsers(): void
+    {
+        [$users, $channels, $servers] = $this->fixture();
+        $s = $this->network()->build(100, $users, $channels, $servers);
+
+        self::assertSame(['users' => 2, 'channels' => 1, 'servers' => 1, 'operators' => 1], $s->counts());
+        self::assertTrue($s->user('chanserv')['hidden']);
+        self::assertTrue($s->user('chanserv')['ulined']);
+        self::assertTrue($s->server('services.example.org')['hidden']);
+        self::assertSame(2, $s->server('irc.example.org')['usercount']);
+        self::assertSame(1, $s->server('irc.example.org')['opercount']);
+    }
+
+    public function testHidesSecretAndListedChannels(): void
+    {
+        [$users, $channels, $servers] = $this->fixture();
+        $s = $this->network(['display' => ['hide_channels' => ['#Services']]])->build(100, $users, $channels, $servers);
+
+        self::assertTrue($s->channel('#secret')['hidden'], 'secret channel hidden by default');
+        self::assertTrue($s->channel('#services')['hidden'], 'listed channel hidden case-insensitively');
+        self::assertFalse($s->channel('#chat')['hidden']);
+        self::assertSame(2, $s->channel('#chat')['usercount'], 'ChanServ does not count as a member');
+        self::assertSame(['#chat'], array_column($s->userChannels('Alice'), 'name'));
+    }
+
+    public function testCanShowSecretChannelsWhenConfigured(): void
+    {
+        [$users, $channels, $servers] = $this->fixture();
+        $s = $this->network(['display' => ['hide_secret_channels' => false, 'hide_ulined' => false]])
+            ->build(100, $users, $channels, $servers);
+
+        self::assertFalse($s->channel('#secret')['hidden']);
+        self::assertFalse($s->user('chanserv')['hidden']);
+        self::assertSame(3, $s->counts()['users']);
+        self::assertSame(2, $s->counts()['servers']);
+    }
+
+    public function testChannelMembersKeepPrefixes(): void
+    {
+        [$users, $channels, $servers] = $this->fixture();
+        $s = $this->network()->build(100, $users, $channels, $servers);
+
+        $members = $s->channelMembers('#CHAT');
+        self::assertSame(['Alice', 'Bob'], array_column($members, 'nick'));
+        self::assertSame('@~', $members[0]['prefixes']);
+        self::assertSame('', $members[1]['prefixes']);
+    }
+
+    public function testModeParsing(): void
+    {
+        self::assertTrue(Network::hasMode(['+nt', '+l 20'], 'l'));
+        self::assertFalse(Network::hasMode(['+nt', '+l 20'], '2'), 'parameters are not mode letters');
+        self::assertTrue(Network::hasMode(['+xio'], 'o'));
+        self::assertFalse(Network::hasMode([], 'o'));
+    }
+
+    public function testSplitPrefix(): void
+    {
+        self::assertSame(['@~', 'Alice'], Snapshot::splitPrefix('@~Alice'));
+        self::assertSame(['', '#chat'], Snapshot::splitPrefix('#chat'));
+        self::assertSame(['+', '#chat'], Snapshot::splitPrefix('+#chat'));
+    }
+}

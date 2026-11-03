@@ -1,0 +1,45 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<h1>{{ 'Operators'|t }}</h1>
+<p class="lead">{{ _n('%s IRC operator online.', '%s IRC operators online.', operators|length)|format(operators|length) }}</p>
+{% if operators %}
+<table class="table table--sortable">
+  <thead><tr>
+    <th data-sort="asc">{{ 'Nick'|t }}</th>
+    <th>{{ 'Host'|t }}</th>
+    {% if cfg.display.show_realname %}<th>{{ 'Real name'|t }}</th>{% endif %}
+    <th>{{ 'Server'|t }}</th>
+    {% if cfg.geoip %}<th>{{ 'Country'|t }}</th>{% endif %}
+    <th>{{ 'Online for'|t }}</th>
+  </tr></thead>
+  <tbody>
+  {% for u in operators %}
+    <tr>
+      <td data-sort-value="{{ u.nick|lower }}"><a href="{{ url_for('user', {nick: u.nick}) }}">{{ u.nick }}</a>{% if u.opertype %} <span class="tag tag--quiet">{{ u.opertype }}</span>{% endif %}{% if u.away %} <span class="tag tag--quiet">{{ 'away'|t }}</span>{% endif %}</td>
+      <td class="mono small">{{ u.host }}</td>
+      {% if cfg.display.show_realname %}<td class="small">{{ u.real|irc_strip }}</td>{% endif %}
+      <td><a href="{{ url_for('server', {server: u.server}) }}">{{ u.server }}</a></td>
+      {% if cfg.geoip %}<td>{{ flag(u.country) }}</td>{% endif %}
+      <td data-sort-value="{{ u.signon }}">{{ (snapshot_time - u.signon)|duration }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% if services_opers %}
+<section>
+  <h2>{{ 'Services operators'|t }}</h2>
+  <p class="muted">{{ 'Accounts with services access, whether online or not.'|t }}</p>
+  <table class="table">
+    <thead><tr><th>{{ 'Account'|t }}</th><th>{{ 'Type'|t }}</th><th>{{ 'Status'|t }}</th></tr></thead>
+    <tbody>
+    {% for o in services_opers %}
+      <tr><td>{{ o.name }}</td><td>{{ o.type }}</td><td>{% if o.online %}<span class="status status--on">{{ 'online'|t }}</span>{% else %}<span class="status status--off">{{ 'offline'|t }}</span>{% endif %}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+{% endblock %}

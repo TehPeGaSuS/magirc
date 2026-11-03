@@ -1,0 +1,25 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<h1>{{ 'Activity'|t }}</h1>
+<p class="lead">{{ 'Who talks the most, in which channels. Counted by services for channels and users that opted in.'|t }}</p>
+{% include '_period.twig' %}
+
+<section>
+  <h2>{{ 'Channels'|t }}</h2>
+  {% if channels %}
+    {% include '_activity_table.twig' with {rows: channels, kind: 'channel'} %}
+  {% else %}
+    <p class="empty">{{ 'No channel has statistics yet. Channel founders enable them with %s.'|t|format('<code>/msg ChanServ SET CHANSTATS #channel ON</code>')|raw }}</p>
+  {% endif %}
+</section>
+
+<section>
+  <h2>{{ 'Users'|t }}</h2>
+  {% if users %}
+    {% include '_activity_table.twig' with {rows: users, kind: 'account'} %}
+  {% else %}
+    <p class="empty">{{ 'No user has statistics yet. Users enable them with %s.'|t|format('<code>/msg NickServ SET CHANSTATS ON</code>')|raw }}</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'layout.twig' %}
+
+{% block title %}{{ title|t }} · {{ cfg.network.name }}{% endblock %}
+
+{% block content %}
+<h1>{{ title|t }}</h1>
+<p class="lead">{{ message|t }}</p>
+<p><a href="{{ url_for('home') }}">{{ 'Back to the network overview'|t }}</a></p>
+{% if details %}<pre class="details">{{ details }}</pre>{% endif %}
+{% endblock %}

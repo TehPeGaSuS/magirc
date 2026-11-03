@@ -1,0 +1,70 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero__figure">
+    <p class="hero__number"><span class="num">{{ counts.users|format_number }}</span> <span class="hero__label">{% if cfg.display.registered_users_only %}{{ _n('registered user online', 'registered users online', counts.users) }}{% else %}{{ _n('user online', 'users online', counts.users) }}{% endif %}</span></p>
+    <p class="muted">
+      {% if peaks.users.count %}{{ 'Peak %s on %s'|t|format(peaks.users.count|format_number, peaks.users.time|datetime('j M Y, H:i')) }}{% endif %}
+    </p>
+  </div>
+  <div class="hero__chart">
+    {% if history.day|length > 1 %}
+      <div class="chart chart--hero" data-chart="line" data-series="users" data-points="{{ chart_data(history.day) }}" data-label="{{ 'Users online, last 24 hours'|t }}" role="img" aria-label="{{ 'Users online over the last 24 hours'|t }}"></div>
+    {% else %}
+      <p class="empty">{{ 'No history yet. Run %s from cron every few minutes to start recording it.'|t|format('<code>php bin/magirc sample</code>')|raw }}</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="facts">
+  <dl class="facts__list">
+    <div><dt>{{ 'Channels'|t }}</dt><dd class="num">{{ counts.channels|format_number }}</dd><dd class="muted small">{{ 'peak %s'|t|format(peaks.channels.count|format_number) }}</dd></div>
+    <div><dt>{{ 'Linked servers'|t }}</dt><dd class="num">{{ counts.servers|format_number }}</dd><dd class="muted small">{{ 'peak %s'|t|format(peaks.servers.count|format_number) }}</dd></div>
+    <div><dt>{{ 'IRC operators'|t }}</dt><dd class="num">{{ counts.operators|format_number }}</dd><dd class="muted small">{{ 'peak %s'|t|format(peaks.operators.count|format_number) }}</dd></div>
+  </dl>
+</section>
+
+<div class="columns">
+  <section>
+    <h2>{{ 'Busiest channels'|t }}</h2>
+    {% if top_channels %}
+    <table class="table">
+      <thead><tr><th>{{ 'Channel'|t }}</th><th class="num">{{ 'Users'|t }}</th><th>{{ 'Topic'|t }}</th></tr></thead>
+      <tbody>
+      {% for c in top_channels %}
+        <tr>
+          <td><a href="{{ url_for('channel', {channel: c.name|trim('#', 'left')}) }}">{{ c.name }}</a></td>
+          <td class="num">{{ c.usercount }}</td>
+          <td class="topic">{{ c.topic.value|default('')|irc_strip }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <p><a href="{{ url_for('channels') }}">{{ 'All channels'|t }}</a></p>
+    {% else %}
+    <p class="empty">{{ 'No public channels right now.'|t }}</p>
+    {% endif %}
+  </section>
+
+  <section>
+    <h2>{{ 'Servers'|t }}</h2>
+    <table class="table">
+      <thead><tr><th>{{ 'Server'|t }}</th><th class="num">{{ 'Users'|t }}</th></tr></thead>
+      <tbody>
+      {% for s in top_servers %}
+        <tr><td><a href="{{ url_for('server', {server: s.name}) }}">{{ s.name }}</a><br><span class="muted small">{{ s.description }}</span></td><td class="num">{{ s.usercount }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    <p><a href="{{ url_for('servers') }}">{{ 'All servers'|t }}</a></p>
+  </section>
+</div>
+
+{% if history.week|length > 1 %}
+<section>
+  <h2>{{ 'The last 30 days'|t }}</h2>
+  <div class="chart chart--wide" data-chart="line" data-series="users,channels" data-points="{{ chart_data(history.month) }}" data-label="{{ 'Users and channels, last 30 days'|t }}" role="img" aria-label="{{ 'Users and channels over the last 30 days'|t }}"></div>
+</section>
+{% endif %}
+{% endblock %}

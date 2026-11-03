@@ -1,0 +1,16 @@
+{# Expects: countries (list with code/name/count/percent), total #}
+<div class="columns columns--chart">
+  <div class="chart chart--pie" data-chart="pie" data-points="{{ chart_data(countries|slice(0, 12)) }}" data-name="name" data-value="count" role="img" aria-label="{{ 'Share of users per country'|t }}"></div>
+  <table class="table table--sortable">
+    <thead><tr><th>{{ 'Country'|t }}</th><th class="num" data-sort="desc">{{ 'Users'|t }}</th><th class="num">%</th></tr></thead>
+    <tbody>
+    {% for c in countries %}
+      <tr>
+        <td data-sort-value="{{ c.name }}">{{ flag(c.code) }} {{ c.code ? c.name : 'Unknown'|t }}</td>
+        <td class="num" data-sort-value="{{ c.count }}">{{ c.count }}</td>
+        <td class="num" data-sort-value="{{ c.percent }}">{{ c.percent }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>

@@ -1,193 +1,98 @@
-# MagIRC #
+# MagIRC
 
-Thank you for your interest in MagIRC, a PHP-based Web Frontend for IRC Services released under the GPLv3 license.
+> [!NOTE]
+> MagIRC 2 was written with the help of an AI coding assistant (Claude Code, Anthropic). The design decisions, the Anope integration and the review of every change are the maintainer's; the code was tested against a live Anope 2.1 network before release. Read it with the same care you would give any other dependency, and report anything that looks wrong in the issue tracker.
 
-This software is a complete rewrite of phpDenora, a PHP-based Web Frontend for the [Denora Stats](https://github.com/denora/denora) project.
+MagIRC is a web frontend for IRC network statistics, built for [Anope](https://www.anope.org/) 2.1. It shows who is online, which channels are busy, how the servers are doing and, optionally, how active each channel and user is.
 
-Meanwhile, MagIRC also works with [Anope](https://www.anope.org/) 2.0, which supersedes Denora.
-We recommend using Anope, since it is being actively maintained and has improved performance and stability over Denora.
-In case you want to migrate from Denora to Anope, we created a script for this task (see below).
+MagIRC 2 is a rewrite of the PHP 5 era MagIRC 1.x. It reads live data from Anope's JSON-RPC interface instead of the removed `irc2sql` module, needs no MySQL for the core pages, and has a new interface with light and dark themes.
 
-### Main features ###
-* REST service
-* [Twig](https://twig.sensiolabs.org) templating engine
-* [jQuery](https://www.jquery.com/)-based UI with AJAX interactions
-* HTML5 and CSS3
-* Easy installation
-* Administration panel
-* Slick design
+## Features
 
-### Requirements ###
-* Web Server with PHP 5.6+ and the `pdo_mysql`, `gettext` and `xml` extensions installed
-* Web Browser supporting HTML5, CSS3 and JavaScript
-* Any of the following:
-	* [Denora Stats](https://github.com/denora/denora) v1.5 server with MySQL enabled
-	* [Anope](https://www.anope.org/) v2.0 with the `m_mysql`, `m_chanstats` and `irc2sql` modules enabled
-* Supported IRC Daemons: Bahamut, Charybdis, InspIRCd, ircd-rizon, IRCu, Nefarious, Ratbox, ScaryNet, Unreal
+* Network overview with the number of users online over the last 24 hours and 30 days, peaks, busiest channels and servers
+* Server, channel, user and operator pages, with sortable and filterable tables
+* Shows registered channels and users logged in to an account by default (Anope keeps no data about anything else); both rules can be switched off
+* Countries of the users online (GeoLite2, optional)
+* Channel activity statistics from Anope's `chanstats` module (optional): lines, words, smileys, kicks, activity by hour of day, per channel and per account
+* JSON API for the live data and history
+* Light and dark theme, following the visitor's system by default
+* Translatable with gettext
 
+## Requirements
 
-## Magirc installation / upgrade ##
+* PHP 8.2 or newer with the `pdo`, `pdo_sqlite`, `mbstring`, `json` and `intl` extensions
+  (`pdo_mysql` as well if you want the activity statistics)
+* [Composer](https://getcomposer.org)
+* A web server pointing at the `public/` directory (Apache with `mod_rewrite`, nginx, Caddy, ...)
+* Anope 2.1.16 or newer with the `httpd`, `jsonrpc` and `rpc_data` modules
+* For the activity statistics: Anope's `mysql` and `chanstats` modules and a MySQL or MariaDB server
+* For the country statistics: a MaxMind GeoLite2 database (free account)
 
-### Using [composer](https://getcomposer.org) and [yarn](https://yarnpkg.com) (recommended) ###
+## Installation
 
-1. Execute the following command:
-	- To install:
-	    - `composer create-project magirc/magirc`
-	    - `yarn`
-	- To update:
-	    - `composer update`
-	    - `yarn`
-	    - Clean up cached pages with `rm -r tmp/*`
-2. Use your web browser to navigate to the setup folder on your server and follow on-screen instructions.
-   Example: https://`yourpathtomagirc`/setup/
+1. Get the code and its dependencies:
 
-### Using a release package ###
-1. Download the latest MagIRC release package from [GitHub](https://h9k.github.io/magirc/)
-2. Extract the MagIRC archive to your web server and move its content to the MagIRC directory.
-3. Use your web browser to navigate to the setup folder on your server and follow on-screen instructions.
-   Example: https://`yourpathtomagirc`/setup/
+       git clone https://github.com/TehPeGaSuS/magirc.git
+       cd magirc
+       composer install --no-dev
 
-### Using git ###
-You need a git client, [composer](https://getcomposer.org) and [yarn](https://yarnpkg.com)
+   The JavaScript chart library is bundled in `public/assets/vendor/`; no Node.js is needed to run MagIRC.
 
-1. Execute the following commands:
-	- To install:
-	    - `git clone git://github.com/h9k/magirc.git`
-	    - `composer install`
-	    - `yarn`
-	- To update:
-	    - `git pull`
-	    - `composer update`
-	    - `yarn`
-2. Use your web browser to navigate to the setup folder on your server and follow on-screen instructions.
-   Example: https://`yourpathtomagirc`/setup/
+2. Configure Anope. `doc/anope-2.1.example.conf` shows the `httpd`, `jsonrpc` and `rpc_data` blocks to enable, and the optional `mysql` + `chanstats` setup. Bind `httpd` to localhost or put it behind TLS: whoever can reach it with the token can read the full user list.
 
+3. Configure MagIRC:
 
-## Anope configuration ###
-You need Anope 2.0.0 or later and the following modules enabled and set up:
+       cp conf/magirc.example.php conf/magirc.php
 
-    m_mysql
-    m_chanstats
-    irc2sql
+   Edit the file. The network name and the Anope RPC token are the only required settings; every other key has a working default and is documented in the file.
 
-These modules are included in the Anope codebase under `extra`. Please refer to the Anope documentation on how to set those up.
+4. Check everything:
 
-Also, you will need additional database tables, views and stored procedures for the Anope database in order to get the data needed by MagIRC.
-Please look at the `setup/sql/anope.sql` file and adapt it if needed (table prefixes, etc.) and run it against your Anope database.
+       php bin/magirc check
 
-Note that you need the MySQL `event_scheduler` set to `ON` in the MySQL server. If you have enough rights, you can turn it on via `SET GLOBAL event_scheduler = ON;`.
+   It verifies the configuration, the connection to Anope and the token's permissions, the history store, the chanstats database (including the MySQL event scheduler) and the GeoIP file, and tells you how to fix whatever is wrong.
 
-If you have access to the server configuration, you can modify the msql configuration file (usually `my.cnf` or `mysqld.cnf`) by setting `event_scheduler = on` in the `[mysqld]` block.
+5. Point your web server at `public/`. With Apache, `public/.htaccess` already routes requests to `index.php`. For nginx:
 
-NOTE: Ubuntu/Debian users: You should **ONLY** edit the file located under `/etc/mysql/mysql.conf.d/` directory, otherwise MySQL will refuse to start/restart. On other distros/OS's, you should look for where the `mysqld.cnf` file is located.
+       location / {
+           try_files $uri /index.php$is_args$args;
+       }
 
-### Migrating from Denora to Anope ###
-If you want to switch from Denora to Anope, please proceed as follows:
+6. Record history. The charts and the peaks come from samples MagIRC takes itself. Add to cron:
 
-1. Install Anope (see above)
-2. Shut down Denora
-3. Make Anope join the network and double check that it is working fine, e.g. the MySQL tables are being filled with data
-4. Configure the `setup/tools/denora2anope.php` script and then run it from command line with `php denora2anope.php`. Be patient and do not interrupt the process!
+       */5 * * * *  php /path/to/magirc/bin/magirc sample
 
+   The `data/` and `tmp/` directories must be writable by the web server user and by the user running cron.
 
-## Denora configuration ##
+## Optional: country statistics
 
-### Required Denora settings ###
+MagIRC looks up each user's address in a GeoLite2 Country database. Set `geoip.database` to the path of the `.mmdb` file. To let MagIRC download and refresh it, create a free account at https://www.maxmind.com/en/geolite2/signup, generate a license key, set `geoip.account_id` and `geoip.license_key`, and run weekly from cron:
 
-**Change** this to a higher value, such as 15 days (15d) to keep information for a longer time.
-Important: the servercache value must NOT be smaller than the usercache value!
+    0 4 * * 1  php /path/to/magirc/bin/magirc geoip:update
 
-    usercache 15d;
-    servercache 30d;
+## Optional: activity statistics
 
-**Change** this to 1h
+Anope's `chanstats` module counts messages in channels that enabled it (`/msg ChanServ SET CHANSTATS #channel ON`) for users that enabled it (`/msg NickServ SET CHANSTATS ON`). It needs MySQL or MariaDB. Point `chanstats.dsn` at that database and set `chanstats.prefix` to the same value as in Anope's `chanstats.conf`.
 
-    uptimefreq 1h;
+The "today", "this week" and "this month" figures only work when the MySQL event scheduler is on (`SET GLOBAL event_scheduler = ON;` and `event_scheduler = ON` under `[mysqld]`), because Anope resets those counters with scheduled events. With the scheduler off, MagIRC shows all-time figures only and `bin/magirc check` says why.
 
-**Enable** the following parameters by removing the '#' in front:
+## Upgrading from MagIRC 1.x
 
-    ctcpusers;
-    keepusers;
-    keepservers;
+MagIRC 2 is a new application; there is no in-place upgrade. Install it as above, then:
 
-**Disable** the following parameter by adding a '#' in front:
+* Remove the `irc2sql` module and MagIRC's old `anope_history`/`anope_maxusage` tables and events from your Anope database: nothing uses them any more.
+* The `magirc` database and the admin panel are gone. Settings live in `conf/magirc.php`; the welcome text lives in `content/welcome.md`.
+* Client statistics (CTCP VERSION) were dropped: many clients block the request and Anope 2.1 does not collect it.
+* Old REST URLs changed. See `doc/API.md`.
 
-    #largenet;
+## Development
 
-### Optional Denora settings ###
-Limiting chanstats to +r users improves nick tracking.
-To use this feature **enable** the following parameters by removing the '#' in front:
+    composer install
+    php -S 127.0.0.1:8090 -t public public/index.php
+    vendor/bin/phpunit
 
-    ustatsregistered;
+`doc/RPC-MAPPING.md` documents which rpc_data fields and chanstats columns each page uses. `tools/` holds the scripts used to test against a local Anope.
 
+## License
 
-## Web Server configuration ##
-
-### Apache ###
-The `AcceptPathInfo` directive should be set to `Default` or `On` in the Apache configuration. It is by default on most servers.
-
-To enable URL rewriting make sure your apache has the `mod_rewrite` module enabled. Then rename `htaccess.txt` to `.htaccess` and enable rewriting in the MagIRC Admin Panel.
-This is optional, MagIRC also works without rewriting on Apache.
-
-It is also recommended, if you allow slashes `/` in your nicknames or channel names, to set `AllowEncodedSlashes On`
-
-### Nginx ###
-Your Nginx configuration file should look like this, adapted to your needs of course:
-
-```
-server {
-	listen 80;
-	server_name magirc.example.com;
-
-	access_log /var/log/nginx/magirc_access.log main;
-	error_log /var/log/nginx/magirc_error.log info;
-
-	root /path/to/magirc;
-	index index.php index.html;
-
-	location / {
-		try_files $uri $uri/ /index.php;
-	}
-
-	location ~ ^(/.+\.php)(/.*)?$ {
-		try_files $1 =404;
-		include /etc/nginx/fastcgi.conf;
-		fastcgi_pass 127.0.0.1:9000;
-		fastcgi_index index.php;
-	}
-}
-```
-
-This will work with or without Magirc rewrite.
-If you do not have `/etc/nginx/fastcgi.conf`, include `/etc/nginx/fastcgi_params`.
-
-If MagIRC is installed in a directory within your webroot (example.com/magirc/), your Nginx configuration file should look like this, adapted to your needs of course:
-
-```
-server {
-	listen 80;
-	server_name example.com;
-
-	access_log /var/log/nginx/magirc_access.log main;
-	error_log /var/log/nginx/magirc_error.log info;
-
-	root /path/to/webroot;
-	index index.php index.html;
-
-	location /magirc {
-		try_files $uri $uri/ /magirc/index.php;
-	}
-
-	location ~ ^(/magirc/.+\.php)(/.*)?$ {
-		try_files $1 =404;
-		include /etc/nginx/fastcgi.conf;
-		fastcgi_pass 127.0.0.1:9000;
-		fastcgi_index index.php;
-	}
-}
-```
-
-### lighttpd ###
-Your lighttpd configuration file should contain this code (along with other settings you may need). This code requires lighttpd >= 1.4.24.
-
-    url.rewrite-if-not-file = ("^" => "/index.php")
+GPL-3.0-or-later. MagIRC was created by Sebastian Vassiliou (h9k); version 2 is maintained by PeGaSuS.

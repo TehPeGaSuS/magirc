@@ -1,0 +1,42 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<h1>{{ user.nick }}{% if user.oper %} <span class="tag">{{ 'IRC operator'|t }}</span>{% endif %}</h1>
+{% if cfg.display.show_realname and user.real %}<p class="lead">{{ user.real|irc_strip }}</p>{% endif %}
+{% if user.away %}<p class="notice">{{ 'Away since %s'|t|format(user.away.time|ago) }}{% if user.away.message %}: {{ user.away.message|irc_strip }}{% endif %}</p>{% endif %}
+
+<dl class="props">
+  <div><dt>{{ 'Host'|t }}</dt><dd class="mono">{{ user.ident }}@{{ user.vhost ?? user.chost ?? user.host }}</dd></div>
+  <div><dt>{{ 'Server'|t }}</dt><dd><a href="{{ url_for('server', {server: user.server}) }}">{{ user.server }}</a></dd></div>
+  <div><dt>{{ 'Online since'|t }}</dt><dd>{{ user.signon|datetime }} <span class="muted">({{ (snapshot_time - user.signon)|duration }})</span></dd></div>
+  {% if cfg.geoip %}<div><dt>{{ 'Country'|t }}</dt><dd>{{ flag(country.code) }} {{ country.name ?: 'Unknown'|t }}</dd></div>{% endif %}
+  <div><dt>{{ 'Account'|t }}</dt><dd>{% if user.account %}{{ user.account.display }}{% if user.account.opertype %} <span class="muted">({{ user.account.opertype }})</span>{% endif %}{% else %}<span class="muted">{{ 'not logged in'|t }}</span>{% endif %}</dd></div>
+  <div><dt>{{ 'Connection'|t }}</dt><dd>{{ user.tls ? 'TLS'|t : 'plain text'|t }}{% if user.fingerprint %} <span class="muted small mono">{{ user.fingerprint }}</span>{% endif %}</dd></div>
+  <div><dt>{{ 'Modes'|t }}</dt><dd class="mono">{{ user.modes|irc_modes ?: '—' }}</dd></div>
+</dl>
+
+{% if has_stats %}
+<p><a class="button" href="{{ url_for('activity.user', {account: user.account.display}) }}">{{ 'Activity statistics'|t }}</a></p>
+{% endif %}
+
+<section>
+  <h2>{{ 'Channels'|t }}</h2>
+  {% if channels %}
+  <table class="table table--sortable">
+    <thead><tr><th>{{ 'Channel'|t }}</th><th>{{ 'Status'|t }}</th><th class="num" data-sort="desc">{{ 'Users'|t }}</th><th>{{ 'Topic'|t }}</th></tr></thead>
+    <tbody>
+    {% for c in channels %}
+      <tr>
+        <td data-sort-value="{{ c.name|lower }}"><a href="{{ url_for('channel', {channel: c.name|trim('#', 'left')}) }}">{{ c.name }}</a></td>
+        <td data-sort-value="{{ c.prefixes|length }}">{% if c.prefixes %}<span class="mono">{{ c.prefixes }}</span> {{ c.prefixes|prefix_name }}{% endif %}</td>
+        <td class="num" data-sort-value="{{ c.channel.usercount }}">{{ c.channel.usercount }}</td>
+        <td class="topic">{{ c.channel.topic.value|default('') }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">{{ 'Not in any public channel.'|t }}</p>
+  {% endif %}
+</section>
+{% endblock %}

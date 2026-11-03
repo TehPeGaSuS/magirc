@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+$root = dirname(__DIR__);
+if (!is_file($root . '/vendor/autoload.php')) {
+    fwrite(STDERR, "Run `composer install` first.\n");
+    exit(1);
+}
+require $root . '/vendor/autoload.php';
+
+use Magirc\Console\CheckCommand;
+use Magirc\Console\GeoipUpdateCommand;
+use Magirc\Console\SampleCommand;
+use Symfony\Component\Console\Application;
+
+$app = new Application('MagIRC', Magirc\Version::STRING);
+$app->add(new CheckCommand($root));
+$app->add(new SampleCommand($root));
+$app->add(new GeoipUpdateCommand($root));
+$app->run();

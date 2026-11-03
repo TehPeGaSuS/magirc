@@ -1,0 +1,7 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<h1>{{ 'Countries'|t }}</h1>
+<p class="lead">{{ 'Where the %s users online now connect from.'|t|format(total|format_number) }}</p>
+{% include '_countries.twig' with {countries: countries, total: total} %}
+{% endblock %}

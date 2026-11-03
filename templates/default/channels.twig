@@ -1,0 +1,25 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<h1>{{ 'Channels'|t }}</h1>
+<p class="lead">{{ _n('%s public channel right now.', '%s public channels right now.', channels|length)|format(channels|length|format_number) }}</p>
+<p><label for="filter" class="visually-hidden">{{ 'Filter channels'|t }}</label><input id="filter" class="filter" type="search" placeholder="{{ 'Filter by name or topic'|t }}" data-filter-table="#channels"></p>
+<table id="channels" class="table table--sortable">
+  <thead><tr>
+    <th>{{ 'Channel'|t }}</th>
+    <th class="num" data-sort="desc">{{ 'Users'|t }}</th>
+    <th>{{ 'Topic'|t }}</th>
+    <th>{{ 'Modes'|t }}</th>
+  </tr></thead>
+  <tbody>
+  {% for c in channels %}
+    <tr>
+      <td data-sort-value="{{ c.name|lower }}"><a href="{{ url_for('channel', {channel: c.name|trim('#', 'left')}) }}">{{ c.name }}</a>{% if c.registered %} <span class="tag tag--quiet" title="{{ 'Registered with ChanServ'|t }}">{{ 'registered'|t }}</span>{% endif %}</td>
+      <td class="num" data-sort-value="{{ c.users }}">{{ c.users }}</td>
+      <td class="topic">{{ c.topic|irc_strip }}</td>
+      <td class="mono small">{{ c.modes|irc_modes }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

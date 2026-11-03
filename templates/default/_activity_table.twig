@@ -1,0 +1,32 @@
+{# Expects: rows (chanstats rows), kind ('channel' or 'account') #}
+<table class="table table--sortable">
+  <thead><tr>
+    <th>{{ kind == 'channel' ? 'Channel'|t : 'Account'|t }}</th>
+    <th class="num" data-sort="desc">{{ 'Lines'|t }}</th>
+    <th class="num">{{ 'Words'|t }}</th>
+    <th class="num">{{ 'Letters'|t }}</th>
+    <th class="num">{{ 'Actions'|t }}</th>
+    <th class="num" title="{{ 'happy / sad / other'|t }}">{{ 'Smileys'|t }}</th>
+    <th class="num">{{ 'Kicks'|t }}</th>
+    <th class="num">{{ 'Modes'|t }}</th>
+    <th class="num">{{ 'Topics'|t }}</th>
+  </tr></thead>
+  <tbody>
+  {% for r in rows %}
+    <tr>
+      <td data-sort-value="{{ (kind == 'channel' ? r.channel : r.account)|lower }}">
+        {% if kind == 'channel' %}<a href="{{ url_for('activity.channel', {channel: r.channel|trim('#', 'left')}) }}?period={{ period }}">{{ r.channel }}</a>
+        {% else %}<a href="{{ url_for('activity.user', {account: r.account}) }}?period={{ period }}">{{ r.account }}</a>{% endif %}
+      </td>
+      <td class="num" data-sort-value="{{ r.lines }}">{{ r.lines|format_number }}</td>
+      <td class="num" data-sort-value="{{ r.words }}">{{ r.words|format_number }}</td>
+      <td class="num" data-sort-value="{{ r.letters }}">{{ r.letters|format_number }}</td>
+      <td class="num" data-sort-value="{{ r.actions }}">{{ r.actions }}</td>
+      <td class="num" data-sort-value="{{ r.smileys }}"><span title="{{ r.smileys_happy }} / {{ r.smileys_sad }} / {{ r.smileys_other }}">{{ r.smileys }}</span></td>
+      <td class="num" data-sort-value="{{ r.kicks }}">{{ r.kicks }}</td>
+      <td class="num" data-sort-value="{{ r.modes }}">{{ r.modes }}</td>
+      <td class="num" data-sort-value="{{ r.topics }}">{{ r.topics }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>

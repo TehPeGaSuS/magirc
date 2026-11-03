@@ -1,0 +1,10 @@
+{# Expects: period, periods, period_reason (optional) #}
+{% set labels = {daily: 'Today'|t, weekly: 'This week'|t, monthly: 'This month'|t, total: 'All time'|t} %}
+<nav class="periods" aria-label="{{ 'Period'|t }}">
+  {% for p in periods %}
+    <a href="?period={{ p }}"{% if p == period %} aria-current="page"{% endif %}>{{ labels[p] }}</a>
+  {% endfor %}
+</nav>
+{% if periods|length == 1 and period_reason is defined and period_reason %}
+  <p class="muted small">{{ 'Only all-time figures are available.'|t }}</p>
+{% endif %}

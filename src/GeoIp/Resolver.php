@@ -1,0 +1,73 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Magirc\GeoIp;
+
+use GeoIp2\Database\Reader;
+use GeoIp2\Exception\AddressNotFoundException;
+
+/**
+ * Country lookup for user addresses from a MaxMind GeoLite2 (Country or
+ * City) database file. Results are memoised per request since many users
+ * share an address or a /24.
+ */
+final class Resolver
+{
+    private ?Reader $reader = null;
+
+    /** @var array<string, array{code: string, name: string}> */
+    private array $cache = [];
+
+    public function __construct(private readonly string $databasePath)
+    {
+    }
+
+    public function enabled(): bool
+    {
+        return $this->databasePath !== '' && is_readable($this->databasePath);
+    }
+
+    /**
+     * @return array{code: string, name: string} ISO code (lower case, '' when unknown) and English name.
+     */
+    public function lookup(?string $address): array
+    {
+        $unknown = ['code' => '', 'name' => ''];
+        if ($address === null || $address === '' || !$this->enabled()) {
+            return $unknown;
+        }
+        if (isset($this->cache[$address])) {
+            return $this->cache[$address];
+        }
+        if (!filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+            return $this->cache[$address] = $unknown;
+        }
+        try {
+            $this->reader ??= new Reader($this->databasePath);
+            $record = $this->reader->country($address);
+            $code = strtolower((string) $record->country->isoCode);
+            $name = (string) $record->country->name;
+            return $this->cache[$address] = $code === '' ? $unknown : ['code' => $code, 'name' => $name];
+        } catch (AddressNotFoundException) {
+            return $this->cache[$address] = $unknown;
+        } catch (\Throwable) {
+            return $this->cache[$address] = $unknown;
+        }
+    }
+
+    /** Metadata of the loaded database, for the check command. */
+    public function describe(): string
+    {
+        if (!$this->enabled()) {
+            return 'not configured';
+        }
+        try {
+            $this->reader ??= new Reader($this->databasePath);
+            $meta = $this->reader->metadata();
+            return sprintf('%s, built %s', $meta->databaseType, date('Y-m-d', $meta->buildEpoch));
+        } catch (\Throwable $e) {
+            return 'unreadable: ' . $e->getMessage();
+        }
+    }
+}

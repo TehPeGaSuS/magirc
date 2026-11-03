@@ -1,0 +1,56 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<h1>{{ channel.name }}</h1>
+{% if channel.topic %}
+  <p class="lead topic">{{ channel.topic.value|irc_strip }}</p>
+  <p class="muted small">{{ 'Topic set by %s, %s'|t|format(channel.topic.setby, channel.topic.setat|ago) }}</p>
+{% else %}
+  <p class="lead muted">{{ 'No topic set.'|t }}</p>
+{% endif %}
+
+<dl class="props">
+  <div><dt>{{ 'Users'|t }}</dt><dd class="num">{{ channel.usercount }}</dd></div>
+  <div><dt>{{ 'Modes'|t }}</dt><dd class="mono">{{ channel.modes|irc_modes ?: '—' }}</dd></div>
+  <div><dt>{{ 'Created'|t }}</dt><dd>{{ channel.created|datetime }} <span class="muted">({{ channel.created|ago }})</span></dd></div>
+  <div><dt>{{ 'Registered'|t }}</dt><dd>{{ channel.registered ? 'yes'|t : 'no'|t }}</dd></div>
+  {% if cfg.network.webchat %}<div><dt>{{ 'Join'|t }}</dt><dd><a href="{{ cfg.network.webchat|replace({'%nick%': '', '%channel%': channel.name|url_encode}) }}">{{ 'Open in webchat'|t }}</a></dd></div>{% endif %}
+</dl>
+
+{% if has_stats %}
+<p><a class="button" href="{{ url_for('activity.channel', {channel: channel.name|trim('#', 'left')}) }}">{{ 'Activity statistics'|t }}</a></p>
+{% endif %}
+
+{% if countries %}
+<section>
+  <h2>{{ 'Countries'|t }}</h2>
+  {% include '_countries.twig' with {countries: countries, total: members|length} %}
+</section>
+{% endif %}
+
+<section>
+  <h2>{{ 'Users'|t }}</h2>
+  <table class="table table--sortable">
+    <thead><tr>
+      <th>{{ 'Nick'|t }}</th>
+      <th>{{ 'Status'|t }}</th>
+      <th>{{ 'Host'|t }}</th>
+      {% if cfg.display.show_realname %}<th>{{ 'Real name'|t }}</th>{% endif %}
+      <th>{{ 'Server'|t }}</th>
+      <th>{{ 'Online for'|t }}</th>
+    </tr></thead>
+    <tbody>
+    {% for m in members %}
+      <tr>
+        <td data-sort-value="{{ m.nick|lower }}"><a href="{{ url_for('user', {nick: m.nick}) }}">{{ m.nick }}</a>{% if m.user.oper %} <span class="tag">{{ 'oper'|t }}</span>{% endif %}{% if m.user.away %} <span class="tag tag--quiet">{{ 'away'|t }}</span>{% endif %}</td>
+        <td data-sort-value="{{ m.prefixes|length }}">{% if m.prefixes %}<span class="mono">{{ m.prefixes }}</span> {{ m.prefixes|prefix_name }}{% endif %}</td>
+        <td class="mono small">{{ m.user.ident }}@{{ m.user.vhost ?? m.user.chost ?? m.user.host }}</td>
+        {% if cfg.display.show_realname %}<td class="small">{{ m.user.real|irc_strip }}</td>{% endif %}
+        <td><a href="{{ url_for('server', {server: m.user.server}) }}">{{ m.user.server }}</a></td>
+        <td data-sort-value="{{ m.user.signon }}">{{ (snapshot_time - m.user.signon)|duration }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

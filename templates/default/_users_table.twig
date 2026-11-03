@@ -1,0 +1,28 @@
+{# Expects: users (list of raw snapshot users), show_server (bool) #}
+<table class="table table--sortable">
+  <thead><tr>
+    <th data-sort="asc">{{ 'Nick'|t }}</th>
+    <th>{{ 'Host'|t }}</th>
+    {% if cfg.display.show_realname %}<th>{{ 'Real name'|t }}</th>{% endif %}
+    {% if show_server %}<th>{{ 'Server'|t }}</th>{% endif %}
+    <th class="num">{{ 'Channels'|t }}</th>
+    <th>{{ 'Online for'|t }}</th>
+  </tr></thead>
+  <tbody>
+  {% for u in users %}
+    <tr>
+      <td data-sort-value="{{ u.nick|lower }}">
+        <a href="{{ url_for('user', {nick: u.nick}) }}">{{ u.nick }}</a>
+        {% if u.oper %}<span class="tag">{{ 'oper'|t }}</span>{% endif %}
+        {% if u.away %}<span class="tag tag--quiet">{{ 'away'|t }}</span>{% endif %}
+        {% if u.tls %}<span class="tag tag--quiet" title="{{ 'Connected with TLS'|t }}">TLS</span>{% endif %}
+      </td>
+      <td class="mono small">{{ u.ident }}@{{ u.vhost ?? u.chost ?? u.host }}</td>
+      {% if cfg.display.show_realname %}<td class="small">{{ u.real|irc_strip }}</td>{% endif %}
+      {% if show_server %}<td><a href="{{ url_for('server', {server: u.server}) }}">{{ u.server }}</a></td>{% endif %}
+      <td class="num" data-sort-value="{{ u.channels|length }}">{{ u.channels|length }}</td>
+      <td data-sort-value="{{ u.signon }}">{{ (snapshot_time - u.signon)|duration }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>

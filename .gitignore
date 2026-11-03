@@ -8,3 +8,10 @@
 composer.lock
 yarn.lock
 *.log
+# MagIRC 2.x
+/conf/magirc.php
+/data/
+/tmp/
+/vendor/
+/node_modules/
+/.phpunit.result.cache
