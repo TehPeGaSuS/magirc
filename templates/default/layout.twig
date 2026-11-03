@@ -57,8 +57,12 @@
 <footer class="site-footer">
   <div class="container site-footer__inner">
     <p>
-      {{ 'Connect:'|t }} <code>{{ cfg.network.server }}:{{ cfg.network.port_tls ?: cfg.network.port }}</code>
-      {% if cfg.network.port_tls %}<span class="muted">(TLS)</span>{% endif %}
+      {% if cfg.network.server and (cfg.network.port_tls or cfg.network.port) %}
+        {{ 'Connect:'|t }} <code>{{ cfg.network.server }}:{{ cfg.network.port_tls ?: cfg.network.port }}</code>
+        {% if cfg.network.port_tls %}<span class="muted">(TLS)</span>{% endif %}
+      {% elseif cfg.network.server %}
+        {{ 'Connect:'|t }} <code>{{ cfg.network.server }}</code>
+      {% endif %}
       {% if cfg.network.webchat %} · <a href="{{ cfg.network.webchat|replace({'%nick%': '', '%channel%': ''}) }}">{{ 'Webchat'|t }}</a>{% endif %}
     </p>
     <p class="muted">

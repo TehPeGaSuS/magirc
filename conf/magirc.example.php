@@ -14,8 +14,11 @@ return [
         'name'       => 'MyNetwork',
         'url'        => 'https://www.mynet.tld/',
         // Server users should connect to (round-robin host) and its ports.
+        // The footer shows the TLS port when set and the plain port only as
+        // a fallback. Set 'port' to null if you do not want to advertise a
+        // plaintext port at all.
         'server'     => 'irc.mynet.tld',
-        'port'       => 6667,
+        'port'       => null,
         'port_tls'   => 6697,
         // Optional webchat URL. "%nick%" and "%channel%" are substituted.
         'webchat'    => '',
