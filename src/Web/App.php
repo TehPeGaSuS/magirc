@@ -56,6 +56,9 @@ final class App
         $theme = $config->string('display.theme', 'default');
         $twig = Twig::create($services->rootDir . '/templates/' . $theme, [
             'cache' => $config->bool('app.debug') ? false : $services->cacheDir() . '/twig',
+            // Recompile a template when its file changes, so a `git pull`
+            // takes effect without clearing tmp/twig by hand.
+            'auto_reload' => true,
             'debug' => $config->bool('app.debug'),
             'strict_variables' => false,
         ]);
