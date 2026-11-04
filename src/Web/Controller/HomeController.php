@@ -89,6 +89,34 @@ final class HomeController extends Controller
         ]);
     }
 
+    /**
+     * Remembers the visitor's language in a cookie and sends them back where
+     * they came from (same site only).
+     * @param array{code: string} $args
+     */
+    public function language(Request $request, Response $response, array $args): Response
+    {
+        $locales = new \Magirc\Web\Locales($this->services->rootDir . '/locale', $this->services->config);
+        $code = $args['code'];
+        if (!$locales->isAvailable($code)) {
+            $this->notFound('There is no translation called "' . $code . '".');
+        }
+        $basePath = rtrim($this->services->config->string('app.base_path'), '/');
+        $back = $basePath . '/';
+        $referer = $request->getHeaderLine('Referer');
+        if ($referer !== '') {
+            $host = parse_url($referer, PHP_URL_HOST);
+            $path = parse_url($referer, PHP_URL_PATH) ?? '/';
+            if ($host === $request->getUri()->getHost() && is_string($path) && !str_starts_with($path, $basePath . '/lang/')) {
+                $back = $path . (parse_url($referer, PHP_URL_QUERY) ? '?' . parse_url($referer, PHP_URL_QUERY) : '');
+            }
+        }
+        $cookie = sprintf('%s=%s; Path=%s; Max-Age=%d; SameSite=Lax%s',
+            \Magirc\Web\Locales::COOKIE, rawurlencode($code), $basePath !== '' ? $basePath : '/', 365 * 86400,
+            $request->getUri()->getScheme() === 'https' ? '; Secure' : '');
+        return $response->withHeader('Set-Cookie', $cookie)->withHeader('Location', $back)->withStatus(303);
+    }
+
     /** @param array{page: string} $args */
     public function content(Request $request, Response $response, array $args): Response
     {

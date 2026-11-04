@@ -29,12 +29,20 @@ final class App
     public static function create(Services $services): SlimApp
     {
         $config = $services->config;
-        // Number and date formatting (intl) follow the configured locale.
-        \Locale::setDefault(str_replace('-', '_', $config->string('display.locale', 'en_US')));
         $container = new Container();
         $container->set(Services::class, $services);
-        $container->set(Translator::class, static fn () => Translator::fromConfig($services));
-        $container->set(Twig::class, static fn (Container $c) => self::twig($services, $c->get(Translator::class)));
+        $locales = new Locales($services->rootDir . '/locale', $config);
+        $container->set(Locales::class, $locales);
+        // The request locale is decided by LocaleMiddleware before Twig is built.
+        $container->set('locale', $locales->default());
+        // Translator and Twig are built per request for the resolved locale
+        // (see the locale middleware); Twig::class holds the current one.
+        $container->set('twig.factory', static fn (Container $c): \Closure => static function () use ($c, $services, $locales): Twig {
+            $translator = Translator::load($services->rootDir . '/locale', (string) $c->get('locale'));
+            $c->set(Translator::class, $translator);
+            return self::twig($services, $translator, $locales);
+        });
+        $container->set(Twig::class, static fn (Container $c): Twig => ($c->get('twig.factory'))());
 
         AppFactory::setContainer($container);
         $app = AppFactory::create();
@@ -44,15 +52,25 @@ final class App
         }
 
         $app->addRoutingMiddleware();
-        $app->add(TwigMiddleware::createFromContainer($app, Twig::class));
+        // Decide the request locale first, then build Twig (and the translator)
+        // for it; TwigMiddleware::createFromContainer would build Twig too early.
+        $app->add(function (ServerRequestInterface $request, $handler) use ($app, $container, $locales) {
+            $locale = $locales->resolve($request);
+            $container->set('locale', $locale);
+            \Locale::setDefault($locale);
+            $twig = ($container->get('twig.factory'))();
+            $container->set(Twig::class, $twig);
+            return (new TwigMiddleware($twig, $app->getRouteCollector()->getRouteParser(), $app->getBasePath()))->process($request, $handler);
+        });
         $errorMiddleware = $app->addErrorMiddleware($config->bool('app.debug'), true, true);
-        $errorMiddleware->setDefaultErrorHandler(new ErrorHandler($app, $container->get(Twig::class)));
+        // Twig is resolved lazily so the request locale is known by the time it is built.
+        $errorMiddleware->setDefaultErrorHandler(new ErrorHandler($app, static fn (): Twig => $container->get(Twig::class)));
 
         self::routes($app);
         return $app;
     }
 
-    private static function twig(Services $services, Translator $translator): Twig
+    private static function twig(Services $services, Translator $translator, Locales $locales): Twig
     {
         $config = $services->config;
         $theme = $config->string('display.theme', 'default');
@@ -76,6 +94,7 @@ final class App
             'base_path' => rtrim($config->string('app.base_path'), '/'),
         ]);
         $env->addGlobal('locale', $translator->locale());
+        $env->addGlobal('locales', $locales->available());
         return $twig;
     }
 
@@ -108,6 +127,7 @@ final class App
         $app->get('/api/countries', [HomeController::class, 'apiCountries'])->setName('api.countries');
 
         $app->get('/content/{page}', [HomeController::class, 'content'])->setName('content');
+        $app->get('/lang/{code}', [HomeController::class, 'language'])->setName('language');
     }
 
     public static function json(ResponseInterface $response, mixed $data): ResponseInterface

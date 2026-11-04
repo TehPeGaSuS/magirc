@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MagIRC 2.0\n"
-"POT-Creation-Date: 2026-11-04 00:51+0000\n"
+"POT-Creation-Date: 2026-11-04 01:09+0000\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -421,6 +421,10 @@ msgstr "Servidores"
 #: templates/default/server.twig templates/default/servers.twig
 msgid "Operators"
 msgstr "Operadores"
+
+#: templates/default/layout.twig
+msgid "Language"
+msgstr "Idioma"
 
 #: templates/default/layout.twig
 msgid "Switch between light and dark theme"

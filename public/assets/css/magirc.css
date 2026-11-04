@@ -92,6 +92,16 @@ p { margin: 0 0 1rem; }
 .nav__list a { display: block; padding: 0.4rem 0.7rem; color: var(--text); border-radius: var(--radius); font-weight: 500; }
 .nav__list a:hover { text-decoration: none; background: var(--panel); }
 .nav__list a[aria-current="page"] { color: var(--accent); box-shadow: inset 0 -2px 0 var(--accent); border-radius: 0; }
+.lang { position: relative; }
+.lang summary { list-style: none; cursor: pointer; border: 1px solid var(--rule); border-radius: var(--radius); padding: 0.35rem 0.7rem; font-size: 0.875rem; line-height: 1.3; }
+.lang summary::-webkit-details-marker { display: none; }
+.lang summary::after { content: " ▾"; color: var(--muted); }
+.lang summary:hover { border-color: var(--accent); color: var(--accent); }
+.lang__list { position: absolute; right: 0; top: calc(100% + 4px); margin: 0; padding: 0.25rem 0; list-style: none; background: var(--page); border: 1px solid var(--rule); border-radius: var(--radius); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); min-width: 10rem; z-index: 5; }
+.lang__list a { display: block; padding: 0.4rem 0.9rem; color: var(--text); white-space: nowrap; }
+.lang__list a:hover { background: var(--panel); text-decoration: none; }
+.lang__list a[aria-current="true"] { color: var(--accent); font-weight: 600; }
+
 .theme-toggle { background: none; border: 1px solid var(--rule); color: var(--text); width: 36px; height: 36px; border-radius: var(--radius); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
 .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
 :root[data-theme="dark"] .theme-toggle__sun, :root:not([data-theme="dark"]) .theme-toggle__moon { display: none; }
@@ -180,7 +190,8 @@ p { margin: 0 0 1rem; }
   .nav__toggle { display: inline-block; background: none; border: 1px solid var(--rule); color: var(--text); padding: 0.35rem 0.8rem; border-radius: var(--radius); font: inherit; }
   .nav__list { display: none; flex-direction: column; gap: 0; padding: 0.5rem 0; }
   .nav--open .nav__list { display: flex; }
-  .theme-toggle { margin-left: auto; }
+  .lang { margin-left: auto; }
+  .theme-toggle { margin-left: 0; }
   .table { display: block; overflow-x: auto; white-space: nowrap; }
   .table td.topic { white-space: normal; min-width: 16rem; }
 }

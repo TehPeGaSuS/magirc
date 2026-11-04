@@ -18,7 +18,8 @@ use Throwable;
  */
 final class ErrorHandler
 {
-    public function __construct(private readonly App $app, private readonly Twig $twig)
+    /** @param \Closure(): Twig $twig */
+    public function __construct(private readonly App $app, private readonly \Closure $twig)
     {
     }
 
@@ -41,7 +42,7 @@ final class ErrorHandler
         if (str_starts_with($request->getUri()->getPath(), rtrim($this->app->getBasePath(), '/') . '/api/')) {
             return \Magirc\Web\App::json($response, ['error' => $title, 'message' => $message]);
         }
-        return $this->twig->render($response, 'error.twig', [
+        return ($this->twig)()->render($response, 'error.twig', [
             'status' => $status,
             'title' => $title,
             'message' => $message,

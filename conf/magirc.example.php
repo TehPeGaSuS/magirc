@@ -76,7 +76,12 @@ return [
 
     // ---- Display ----------------------------------------------------------
     'display' => [
-        'locale'    => 'en_US',
+        // Languages offered in the header menu, the first one being the
+        // default. Each needs a locale/<code>/LC_MESSAGES/magirc.po|mo
+        // (English needs none). A visitor's choice is kept in a cookie.
+        // A single string instead of a list means "that default, and offer
+        // every installed translation".
+        'locale'    => ['en_US', 'pt_PT'],
         'timezone'  => 'UTC',
         'theme'     => 'default',
         // Page shown on "/": 'status' (network overview) or 'welcome'

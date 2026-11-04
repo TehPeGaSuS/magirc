@@ -25,7 +25,7 @@ final class Translator
 
     public static function fromConfig(Services $services): self
     {
-        $locale = $services->config->string('display.locale', 'en_US');
+        $locale = (new Locales($services->rootDir . '/locale', $services->config))->default();
         return self::load($services->rootDir . '/locale', $locale);
     }
 

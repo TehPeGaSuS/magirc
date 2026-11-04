@@ -16,7 +16,7 @@ MagIRC 2 is a rewrite of the PHP 5 era MagIRC 1.x. It reads live data from Anope
 * Channel activity statistics from Anope's `chanstats` module (optional): lines, words, smileys, kicks, activity by hour of day, per channel and per account
 * JSON API for the live data and history
 * Light and dark theme, following the visitor's system by default
-* Translatable with gettext; Portuguese (`pt_PT`) included, set `display.locale`
+* Language menu in the header; English and Portuguese (`pt_PT`) included, `display.locale` lists what to offer
 
 ## Requirements
 
