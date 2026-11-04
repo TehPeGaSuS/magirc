@@ -31,6 +31,7 @@ final class TemplateExtension extends AbstractExtension
             // (quotes become &quot;, which the browser decodes before JSON.parse).
             new TwigFunction('chart_data', fn (mixed $v): string => json_encode($v, JSON_THROW_ON_ERROR)),
             new TwigFunction('webchat_url', [$this, 'webchatUrl']),
+            new TwigFunction('icon', [$this, 'icon'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -65,6 +66,32 @@ final class TemplateExtension extends AbstractExtension
         $base = strstr($url, '?', true) ?: $url;
         $fragment = isset($parts['fragment']) ? '#' . $parts['fragment'] : '';
         return $base . ($kept ? '?' . implode('&', $kept) : '') . $fragment;
+    }
+
+    /**
+     * Lucide icons (https://lucide.dev, ISC licence), inline so they take
+     * the text colour of the theme. Inner SVG markup of each icon.
+     */
+    private const ICONS = [
+        'lock' => '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+        'moon' => '<path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/>',
+        'shield-user' => '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M6.376 18.91a6 6 0 0 1 11.249.003"/><circle cx="12" cy="11" r="4"/>',
+    ];
+
+    /**
+     * An icon with its meaning as hover text and as hidden text, so screen
+     * readers and the table filter still see the word.
+     */
+    public function icon(string $name, string $label, string $class = ''): string
+    {
+        if (!isset(self::ICONS[$name])) {
+            return '';
+        }
+        $label = htmlspecialchars($label, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $class = trim('icon icon--' . $name . ' ' . htmlspecialchars($class, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        return '<span class="' . $class . '" title="' . $label . '">'
+            . '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'
+            . self::ICONS[$name] . '</svg><span class="visually-hidden">' . $label . '</span></span>';
     }
 
     public function getFilters(): array

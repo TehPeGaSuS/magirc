@@ -159,6 +159,9 @@ p { margin: 0 0 1rem; }
 
 .tag { display: inline-block; font-size: 0.7rem; line-height: 1.4; font-weight: 600; padding: 0 0.4rem; margin-left: 0.35rem; border-radius: 3px; background: var(--accent); color: var(--accent-ink); vertical-align: middle; }
 .tag--quiet { background: var(--panel); color: var(--muted); }
+.icon { display: inline-flex; vertical-align: -0.15em; margin-left: 0.3rem; color: var(--muted); }
+.icon svg { width: 1em; height: 1em; }
+.icon--accent { color: var(--accent); }
 .status::before { content: ""; display: inline-block; width: 0.55em; height: 0.55em; border-radius: 50%; margin-right: 0.4em; background: currentColor; }
 .status--on { color: var(--ok); }
 .status--off { color: var(--off); }

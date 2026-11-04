@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MagIRC 2.0\n"
-"POT-Creation-Date: 2026-11-04 01:09+0000\n"
+"POT-Creation-Date: 2026-11-04 01:34+0000\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -144,14 +144,14 @@ msgid "Online for"
 msgstr "Ligado há"
 
 #: templates/default/_users_table.twig templates/default/channel.twig
-#: templates/default/users.twig
-msgid "oper"
-msgstr "oper"
+#: templates/default/user.twig templates/default/users.twig
+msgid "IRC operator"
+msgstr "Operador de IRC"
 
 #: templates/default/_users_table.twig templates/default/channel.twig
 #: templates/default/operators.twig templates/default/users.twig
-msgid "away"
-msgstr "ausente"
+msgid "Away"
+msgstr "Ausente"
 
 #: templates/default/_users_table.twig templates/default/users.twig
 msgid "Connected with TLS"
@@ -577,10 +577,6 @@ msgstr[0] "%s servidor não é mostrado neste site."
 msgstr[1] "%s servidores não são mostrados neste site."
 
 #: templates/default/user.twig
-msgid "IRC operator"
-msgstr "Operador de IRC"
-
-#: templates/default/user.twig
 msgid "Away since %s"
 msgstr "Ausente desde %s"
 
@@ -732,4 +728,3 @@ msgstr "halfop"
 #: src/Web/TemplateExtension.php
 msgid "voice"
 msgstr "voice"
-

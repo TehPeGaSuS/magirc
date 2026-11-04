@@ -93,4 +93,4 @@ MagIRC 2 is a new application; there is no in-place upgrade. Install it as above
 
 MagIRC was created by Sebastian Vassiliou (h9k) as a frontend for Denora and Anope 2.0; the 1.x code lives on at [h9k/magirc](https://github.com/h9k/magirc). Version 2 is a rewrite maintained by PeGaSuS in this repository, which was detached from the original fork network after the rewrite.
 
-GPL-3.0-or-later.
+GPL-3.0-or-later. The status icons are from [Lucide](https://lucide.dev) (ISC licence); charts are drawn with [Apache ECharts](https://echarts.apache.org) (Apache-2.0).
