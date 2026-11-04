@@ -55,6 +55,40 @@ final class HomeController extends Controller
         ]);
     }
 
+    /**
+     * Users connecting from one country ("unknown" for addresses the
+     * database cannot place), respecting the listing rules.
+     * @param array{code: string} $args
+     */
+    public function country(Request $request, Response $response, array $args): Response
+    {
+        $geo = $this->services->geoip();
+        if (!$geo->enabled()) {
+            $this->notFound('Country statistics are not enabled on this site.');
+        }
+        $code = $args['code'] === 'unknown' ? '' : strtolower($args['code']);
+        $name = '';
+        $users = [];
+        foreach ($this->snapshot()->visibleUsers() as $u) {
+            $c = $geo->lookup($u['address'] ?? null);
+            if ($c['code'] === $code) {
+                $users[] = $u;
+                $name = $c['name'];
+            }
+        }
+        if ($users === []) {
+            $this->notFound('Nobody is connecting from there right now.');
+        }
+        usort($users, static fn (array $a, array $b): int => strcasecmp($a['nick'], $b['nick']));
+
+        return $this->render($response, 'country.twig', [
+            'title' => $name !== '' ? $name : 'Unknown country',
+            'code' => $code,
+            'name' => $name,
+            'users' => $users,
+        ]);
+    }
+
     /** @param array{page: string} $args */
     public function content(Request $request, Response $response, array $args): Response
     {

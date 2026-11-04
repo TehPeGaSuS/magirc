@@ -1,0 +1,8 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+<h1>{{ flag(code) }} {{ name ?: 'Unknown country'|t }}</h1>
+<p class="lead">{% if name %}{{ _n('%s user online from %s.', '%s users online from %s.', users|length)|format(users|length|format_number, name) }}{% else %}{{ _n('%s user online whose address the country database cannot place.', '%s users online whose addresses the country database cannot place.', users|length)|format(users|length|format_number) }}{% endif %} <a href="{{ url_for('network.countries') }}">{{ 'All countries'|t }}</a></p>
+{% if cfg.display.registered_users_only %}<p class="note">{{ 'Only users logged in to a NickServ account are listed.'|t }}</p>{% endif %}
+{% include '_users_table.twig' with {users: users, show_server: true} %}
+{% endblock %}

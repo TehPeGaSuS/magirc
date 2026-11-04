@@ -82,6 +82,7 @@ final class App
         $app->get('/', [HomeController::class, 'home'])->setName('home');
         $app->get('/network', [HomeController::class, 'network'])->setName('network');
         $app->get('/network/countries', [HomeController::class, 'countries'])->setName('network.countries');
+        $app->get('/network/countries/{code:[a-z]{2}|unknown}', [HomeController::class, 'country'])->setName('network.country');
 
         $app->get('/servers', [ServersController::class, 'index'])->setName('servers');
         $app->get('/servers/{server}', [ServersController::class, 'show'])->setName('server');
