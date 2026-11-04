@@ -21,7 +21,7 @@ final class NetworkTest extends TestCase
         ];
         $users = [
             'Alice' => ['server' => 'irc.example.org', 'modes' => ['+xio'], 'channels' => ['@~#chat', '#secret'], 'address' => '203.0.113.5', 'account' => ['display' => 'Alice']],
-            'Bob' => ['server' => 'irc.example.org', 'modes' => ['+x'], 'channels' => ['#chat', '+#services', '#lounge'], 'address' => '203.0.113.6', 'account' => null],
+            'Bob' => ['server' => 'irc.example.org', 'modes' => ['+xB'], 'channels' => ['#chat', '+#services', '#lounge'], 'address' => '203.0.113.6', 'account' => null],
             'ChanServ' => ['server' => 'services.example.org', 'modes' => ['+io'], 'channels' => ['@&#chat', '#services'], 'address' => '0.0.0.0', 'account' => null],
         ];
         $channels = [
@@ -41,6 +41,17 @@ final class NetworkTest extends TestCase
             $overrides,
         ));
         return new Network(new RpcClient('http://127.0.0.1:1/', ''), $config);
+    }
+
+    public function testBotUserMode(): void
+    {
+        [$users, $channels, $servers] = $this->fixture();
+        $s = $this->network()->build(100, $users, $channels, $servers);
+        self::assertTrue($s->user('bob')['bot'], '+B marks a bot by default');
+        self::assertFalse($s->user('alice')['bot']);
+
+        $s = $this->network(['display' => ['bot_umode' => '']])->build(100, $users, $channels, $servers);
+        self::assertFalse($s->user('bob')['bot'], 'an empty bot_umode turns it off');
     }
 
     public function testRegisteredOnlyIsTheDefault(): void

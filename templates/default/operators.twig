@@ -16,7 +16,7 @@
   <tbody>
   {% for u in operators %}
     <tr>
-      <td data-sort-value="{{ u.nick|lower }}"><a href="{{ url_for('user', {nick: u.nick}) }}">{{ u.nick }}</a>{% if u.opertype %} <span class="tag tag--quiet">{{ u.opertype }}</span>{% endif %}{% if u.away %} {{ icon('moon', 'Away'|t) }}{% endif %}</td>
+      <td data-sort-value="{{ u.nick|lower }}"><a href="{{ url_for('user', {nick: u.nick}) }}">{{ u.nick }}</a>{% if u.opertype %} <span class="tag tag--quiet">{{ u.opertype }}</span>{% endif %}{% if u.bot %} {{ icon('bot', 'Bot'|t) }}{% endif %}{% if u.away %} {{ icon('moon', 'Away'|t) }}{% endif %}</td>
       <td class="mono small">{{ u.host }}</td>
       {% if cfg.display.show_realname %}<td class="small">{{ u.real|irc_strip }}</td>{% endif %}
       <td>{% if u.server_hidden %}{{ u.server }}{% else %}<a href="{{ url_for('server', {server: u.server}) }}">{{ u.server }}</a>{% endif %}</td>

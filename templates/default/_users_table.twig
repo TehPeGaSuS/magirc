@@ -14,6 +14,7 @@
       <td data-sort-value="{{ u.nick|lower }}">
         <a href="{{ url_for('user', {nick: u.nick}) }}">{{ u.nick }}</a>
         {% if u.oper %}{{ icon('shield-user', 'IRC operator'|t, 'icon--accent') }}{% endif %}
+        {% if u.bot %}{{ icon('bot', 'Bot'|t) }}{% endif %}
         {% if u.away %}{{ icon('moon', 'Away'|t) }}{% endif %}
         {% if u.tls %}{{ icon('lock', 'Connected with TLS'|t) }}{% endif %}
       </td>

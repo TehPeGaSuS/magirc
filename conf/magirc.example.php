@@ -108,6 +108,9 @@ return [
         // to the server.
         'hide_channels' => ['#opers', '#services'],
         'hide_servers'  => [],
+        // User mode that marks bots, shown as an icon next to the nick
+        // (+B on UnrealIRCd, InspIRCd and ngIRCd). '' turns the icon off.
+        'bot_umode' => 'B',
         // Show the user's realname on the user pages.
         'show_realname' => true,
         // Rows per page in the long tables (users, channels, members). The

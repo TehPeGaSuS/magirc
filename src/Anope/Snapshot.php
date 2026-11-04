@@ -12,6 +12,7 @@ namespace Magirc\Anope;
  * Users, channels and servers are arrays keyed by their lower-cased name.
  * Field names follow rpc_data (see doc/RPC-MAPPING.md) with these additions:
  *   user.oper      bool, IRC operator (umode +o)
+ *   user.bot       bool, marked as a bot (display.bot_umode, +B by default)
  *   user.ulined    bool, sits on a U-lined (services) server
  *   user.hidden    bool, excluded from counts and lists
  *   channel.hidden bool

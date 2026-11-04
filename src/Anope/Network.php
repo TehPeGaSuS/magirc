@@ -62,6 +62,7 @@ final class Network
         $hideUlined = $this->config->bool('display.hide_ulined', true);
         $registeredChannels = $this->config->bool('display.registered_channels_only', true);
         $registeredUsers = $this->config->bool('display.registered_users_only', true);
+        $botMode = $this->config->string('display.bot_umode', 'B');
         $hideSecret = $this->config->bool('display.hide_secret_channels', true);
         $hidePrivate = $this->config->bool('display.hide_private_channels', true);
         $hiddenChannels = array_map('mb_strtolower', $this->config->list('display.hide_channels'));
@@ -85,6 +86,7 @@ final class Network
             $serverKey = mb_strtolower((string) ($u['server'] ?? ''));
             $u['ulined'] = $srv[$serverKey]['ulined'] ?? false;
             $u['oper'] = self::hasMode($u['modes'] ?? [], 'o');
+            $u['bot'] = $botMode !== '' && self::hasMode($u['modes'] ?? [], $botMode);
             $u['registered'] = is_array($u['account'] ?? null) && ($u['account']['display'] ?? '') !== '';
             // hidden: never counted nor listed (services clients, hidden servers).
             // listed: appears in user lists; counts include unlisted users too.

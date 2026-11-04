@@ -1,7 +1,7 @@
 {% extends 'layout.twig' %}
 
 {% block content %}
-<h1>{{ user.nick }}{% if user.oper %} <span class="tag">{{ 'IRC operator'|t }}</span>{% endif %}</h1>
+<h1>{{ user.nick }}{% if user.oper %} <span class="tag">{{ 'IRC operator'|t }}</span>{% endif %}{% if user.bot %} <span class="tag tag--quiet">{{ 'Bot'|t }}</span>{% endif %}</h1>
 {% if cfg.display.show_realname and user.real %}<p class="lead">{{ user.real|irc_strip }}</p>{% endif %}
 {% if user.away %}<p class="notice">{{ 'Away since %s'|t|format(user.away.time|ago) }}{% if user.away.message %}: {{ user.away.message|irc_strip }}{% endif %}</p>{% endif %}
 
