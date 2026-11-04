@@ -38,6 +38,7 @@ final class HomeController extends Controller
             'history' => ['day' => $day, 'week' => $week, 'month' => $month],
             'last_sample' => $store->lastSampleTime(),
             'top_servers' => array_slice($servers, 0, 5),
+            'hidden' => $snapshot->hiddenCounts(),
             'top_channels' => array_slice($channels, 0, 10),
             'operators' => count($snapshot->operators()),
         ]);

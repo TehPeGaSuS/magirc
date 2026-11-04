@@ -1,0 +1,2 @@
+{# Expects: rows (users with server_hidden). Shown only when a listed user is on a hidden server. #}
+{% if rows|filter(r => r.server_hidden)|length %}<p class="note">{{ 'Servers that are not shown on this site appear without a link.'|t }}</p>{% endif %}

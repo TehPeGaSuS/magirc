@@ -4,7 +4,7 @@
 <h1>{{ 'Users'|t }}</h1>
 <p class="lead">{% if cfg.display.registered_users_only %}{{ _n('%s registered user online, %s users in total.', '%s registered users online, %s users in total.', users|length)|format(users|length|format_number, total|format_number) }}{% else %}{{ _n('%s user online.', '%s users online.', users|length)|format(users|length|format_number) }}{% endif %}</p>
 {% if cfg.display.registered_users_only %}<p class="note">{{ 'Only users logged in to a NickServ account are listed; the totals on this site count everyone.'|t }}</p>{% endif %}
-{% if hidden.servers %}<p class="note">{{ _n('%s server is not shown on this site; its users appear without a link to it.', '%s servers are not shown on this site; their users appear without a link to them.', hidden.servers)|format(hidden.servers) }}</p>{% endif %}
+{% include '_hidden_server_note.twig' with {rows: users} %}
 <p><label for="filter" class="visually-hidden">{{ 'Filter users'|t }}</label><input id="filter" class="filter" type="search" placeholder="{{ 'Filter by nick, host or name'|t }}" data-filter-table="#users"></p>
 <table id="users" class="table table--sortable table--paged">
   <thead><tr>

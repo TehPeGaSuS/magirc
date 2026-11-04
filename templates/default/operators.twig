@@ -4,6 +4,7 @@
 <h1>{{ 'Operators'|t }}</h1>
 <p class="lead">{{ _n('%s IRC operator online.', '%s IRC operators online.', operators|length)|format(operators|length) }}</p>
 {% if operators %}
+{% include '_hidden_server_note.twig' with {rows: operators} %}
 <table class="table table--sortable">
   <thead><tr>
     <th data-sort="asc">{{ 'Nick'|t }}</th>

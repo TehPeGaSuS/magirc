@@ -74,6 +74,8 @@ final class Network
             $s['name'] = (string) $name;
             $s['ulined'] = (bool) ($s['ulined'] ?? false);
             $s['hidden'] = in_array($key, $hiddenServers, true) || ($hideUlined && $s['ulined']);
+            // Counted in the network totals: everything but hidden services.
+            $s['counted'] = !($hideUlined && $s['ulined']);
             $s['usercount'] = 0;
             $s['opercount'] = 0;
             $srv[$key] = $s;

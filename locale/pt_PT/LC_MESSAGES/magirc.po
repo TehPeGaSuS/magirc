@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MagIRC 2.0\n"
-"POT-Creation-Date: 2026-11-04 02:19+0000\n"
+"POT-Creation-Date: 2026-11-04 23:03+0000\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -83,6 +83,10 @@ msgstr "Utilizadores"
 #: templates/default/_countries.twig templates/default/user.twig
 msgid "Unknown"
 msgstr "Desconhecido"
+
+#: templates/default/_hidden_server_note.twig
+msgid "Servers that are not shown on this site appear without a link."
+msgstr "Os servidores que não são mostrados neste site aparecem sem ligação."
 
 #: templates/default/_period.twig
 msgid "Today"
@@ -518,6 +522,12 @@ msgid_plural "users online"
 msgstr[0] "utilizador online"
 msgstr[1] "utilizadores online"
 
+#: templates/default/network.twig templates/default/servers.twig
+msgid "%s server is not shown on this site."
+msgid_plural "%s servers are not shown on this site."
+msgstr[0] "%s servidor não é mostrado neste site."
+msgstr[1] "%s servidores não são mostrados neste site."
+
 #: templates/default/operators.twig
 msgid "Services operators"
 msgstr "Operadores dos serviços"
@@ -576,12 +586,6 @@ msgstr "Utilizadores neste servidor nos últimos 7 dias"
 #: templates/default/servers.twig
 msgid "last seen %s"
 msgstr "visto pela última vez %s"
-
-#: templates/default/servers.twig
-msgid "%s server is not shown on this site."
-msgid_plural "%s servers are not shown on this site."
-msgstr[0] "%s servidor não é mostrado neste site."
-msgstr[1] "%s servidores não são mostrados neste site."
 
 #: templates/default/user.twig
 msgid "Away since %s"
@@ -644,19 +648,6 @@ msgid "%s user online."
 msgid_plural "%s users online."
 msgstr[0] "%s utilizador online."
 msgstr[1] "%s utilizadores online."
-
-#: templates/default/users.twig
-msgid ""
-"%s server is not shown on this site; its users appear without a link to it."
-msgid_plural ""
-"%s servers are not shown on this site; their users appear without a link to "
-"them."
-msgstr[0] ""
-"%s servidor não é mostrado neste site; os seus utilizadores aparecem sem "
-"ligação para ele."
-msgstr[1] ""
-"%s servidores não são mostrados neste site; os seus utilizadores aparecem "
-"sem ligação para eles."
 
 #: src/Web/ErrorHandler.php
 msgid "Not found"

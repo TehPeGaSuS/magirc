@@ -57,6 +57,7 @@
       {% endfor %}
       </tbody>
     </table>
+    {% if hidden.servers %}<p class="note">{{ _n('%s server is not shown on this site.', '%s servers are not shown on this site.', hidden.servers)|format(hidden.servers) }}</p>{% endif %}
     <p><a href="{{ url_for('servers') }}">{{ 'All servers'|t }}</a></p>
   </section>
 </div>

@@ -149,7 +149,9 @@ final class NetworkTest extends TestCase
         $s = $this->network(['display' => ['hide_servers' => ['IRC.example.org']]])->build(100, $users, $channels, $servers);
 
         self::assertTrue($s->server('irc.example.org')['hidden']);
-        self::assertSame(0, $s->counts()['servers']);
+        self::assertSame(1, $s->counts()['servers'], 'a hidden server still counts, like its users');
+        self::assertSame([], $s->visibleServers());
+        self::assertSame(1, $s->hiddenCounts()['servers'], 'services are not reported as hidden');
         self::assertSame(2, $s->counts()['users'], 'users on a hidden server still count');
         self::assertFalse($s->user('alice')['hidden']);
         self::assertTrue($s->user('alice')['server_hidden']);

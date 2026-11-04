@@ -75,6 +75,17 @@ final class Snapshot
     }
 
     /** @return array<string, array<string, mixed>> */
+    public function countedServers(): array
+    {
+        return array_filter($this->servers, static fn (array $s): bool => $s['counted'] ?? !$s['hidden']);
+    }
+
+    /**
+     * Servers shown on the site. A server in display.hide_servers is still
+     * counted (countedServers) but not shown.
+     *
+     * @return array<string, array<string, mixed>>
+     */
     public function visibleServers(): array
     {
         return array_filter($this->servers, static fn (array $s): bool => !$s['hidden']);
@@ -93,7 +104,7 @@ final class Snapshot
      */
     public function hiddenCounts(): array
     {
-        $servers = count(array_filter($this->servers, static fn (array $s): bool => $s['hidden'] && !$s['ulined']));
+        $servers = count(array_filter($this->servers, static fn (array $s): bool => $s['hidden'] && ($s['counted'] ?? !$s['ulined'])));
         $channels = count(array_filter($this->channels, static fn (array $c): bool => $c['hidden']));
         return ['servers' => $servers, 'channels' => $channels];
     }
@@ -104,7 +115,7 @@ final class Snapshot
         return [
             'users' => count($this->countedUsers()),
             'channels' => count($this->countedChannels()),
-            'servers' => count($this->visibleServers()),
+            'servers' => count($this->countedServers()),
             'operators' => count($this->operators()),
         ];
     }
