@@ -21,11 +21,11 @@
       <td class="num" data-sort-value="{{ r.lines }}">{{ r.lines|format_number }}</td>
       <td class="num" data-sort-value="{{ r.words }}">{{ r.words|format_number }}</td>
       <td class="num" data-sort-value="{{ r.letters }}">{{ r.letters|format_number }}</td>
-      <td class="num" data-sort-value="{{ r.actions }}">{{ r.actions }}</td>
-      <td class="num" data-sort-value="{{ r.smileys }}"><span title="{{ r.smileys_happy }} / {{ r.smileys_sad }} / {{ r.smileys_other }}">{{ r.smileys }}</span></td>
-      <td class="num" data-sort-value="{{ r.kicks }}">{{ r.kicks }}</td>
-      <td class="num" data-sort-value="{{ r.modes }}">{{ r.modes }}</td>
-      <td class="num" data-sort-value="{{ r.topics }}">{{ r.topics }}</td>
+      <td class="num" data-sort-value="{{ r.actions }}">{{ r.actions|format_number }}</td>
+      <td class="num" data-sort-value="{{ r.smileys }}"><span title="{{ r.smileys_happy|format_number }} / {{ r.smileys_sad|format_number }} / {{ r.smileys_other|format_number }}">{{ r.smileys|format_number }}</span></td>
+      <td class="num" data-sort-value="{{ r.kicks }}">{{ r.kicks|format_number }}</td>
+      <td class="num" data-sort-value="{{ r.modes }}">{{ r.modes|format_number }}</td>
+      <td class="num" data-sort-value="{{ r.topics }}">{{ r.topics|format_number }}</td>
     </tr>
   {% endfor %}
   </tbody>
