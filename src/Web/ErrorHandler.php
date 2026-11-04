@@ -31,7 +31,8 @@ final class ErrorHandler
         bool $logErrorDetails,
     ): ResponseInterface {
         [$status, $title, $message] = match (true) {
-            $exception instanceof HttpNotFoundException, $exception instanceof NotFound => [404, 'Not found', $exception->getMessage() ?: 'There is nothing at this address.'],
+            $exception instanceof NotFound => [404, 'Not found', $exception->getMessage() ?: 'There is nothing at this address.'],
+            $exception instanceof HttpNotFoundException => [404, 'Not found', 'There is nothing at this address.'],
             $exception instanceof RpcException => [503, 'Services unavailable', 'MagIRC could not get data from the IRC services. Try again in a moment.'],
             default => [500, 'Something went wrong', 'The page could not be built.'],
         };

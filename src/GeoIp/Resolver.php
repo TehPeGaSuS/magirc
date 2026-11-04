@@ -19,8 +19,35 @@ final class Resolver
     /** @var array<string, array{code: string, name: string}> */
     private array $cache = [];
 
+    /** @var list<string> GeoLite2 name locales, most wanted first. */
+    private array $locales = ['en'];
+
     public function __construct(private readonly string $databasePath)
     {
+    }
+
+    /**
+     * Country names in this language when the database has them (GeoLite2
+     * ships de, en, es, fr, ja, pt-BR, ru, zh-CN). Portuguese gets the pt-BR
+     * names, which are the same for countries, then English as fallback.
+     */
+    public function setLocale(string $locale): void
+    {
+        $tag = str_replace('_', '-', $locale);
+        $lang = strtolower(explode('-', $tag)[0]);
+        $candidates = [$tag, $lang];
+        if ($lang === 'pt') {
+            $candidates[] = 'pt-BR';
+        } elseif ($lang === 'zh') {
+            $candidates[] = 'zh-CN';
+        }
+        $candidates[] = 'en';
+        $wanted = array_values(array_unique($candidates));
+        if ($wanted !== $this->locales) {
+            $this->locales = $wanted;
+            $this->reader = null;
+            $this->cache = [];
+        }
     }
 
     public function enabled(): bool
@@ -44,7 +71,7 @@ final class Resolver
             return $this->cache[$address] = $unknown;
         }
         try {
-            $this->reader ??= new Reader($this->databasePath);
+            $this->reader ??= new Reader($this->databasePath, $this->locales);
             $record = $this->reader->country($address);
             $code = strtolower((string) $record->country->isoCode);
             $name = (string) $record->country->name;
@@ -63,7 +90,7 @@ final class Resolver
             return 'not configured';
         }
         try {
-            $this->reader ??= new Reader($this->databasePath);
+            $this->reader ??= new Reader($this->databasePath, $this->locales);
             $meta = $this->reader->metadata();
             return sprintf('%s, built %s', $meta->databaseType, date('Y-m-d', $meta->buildEpoch));
         } catch (\Throwable $e) {

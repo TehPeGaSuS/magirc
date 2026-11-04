@@ -38,5 +38,9 @@ final class ResolverTest extends TestCase
         self::assertSame('', $r->lookup('10.0.0.1')['code']);
         self::assertSame('', $r->lookup('garbage')['code']);
         self::assertStringStartsWith('GeoLite2-Country, built', $r->describe());
+        $r->setLocale('pt_PT');
+        self::assertSame('Alemanha', $r->lookup('2a01:4f8::1')['name'], 'names follow the locale');
+        $r->setLocale('en_US');
+        self::assertSame('Germany', $r->lookup('2a01:4f8::1')['name']);
     }
 }

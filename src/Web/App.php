@@ -58,6 +58,7 @@ final class App
             $locale = $locales->resolve($request);
             $container->set('locale', $locale);
             \Locale::setDefault($locale);
+            $services->geoip()->setLocale($locale);
             $twig = ($container->get('twig.factory'))();
             $container->set(Twig::class, $twig);
             return (new TwigMiddleware($twig, $app->getRouteCollector()->getRouteParser(), $app->getBasePath()))->process($request, $handler);
