@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ locale|replace({'_': '-'}) }}" data-theme-default="{{ cfg.display.theme_default|default('system') }}">
+<html lang="{{ locale|replace({'_': '-'}) }}" data-theme-default="{{ cfg.display.theme_default|default('system') }}" data-page-size="{{ cfg.display.page_size|default(50) }}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,7 +21,7 @@
 })();
 </script>
 </head>
-<body>
+<body data-i18n-pager="{{ 'Pages'|t }}" data-i18n-prev="{{ 'Previous'|t }}" data-i18n-next="{{ 'Next'|t }}">
 <a class="skip" href="#main">{{ 'Skip to content'|t }}</a>
 <header class="site-header">
   <div class="container site-header__inner">

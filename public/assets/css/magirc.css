@@ -136,6 +136,12 @@ p { margin: 0 0 1rem; }
 .table--sortable th[aria-sort="ascending"]::after { content: " ↑"; }
 .table--sortable th[aria-sort="descending"]::after { content: " ↓"; }
 
+.pager { display: flex; align-items: center; gap: 1rem; margin: 0.25rem 0 1.5rem; font-size: 0.875rem; }
+.pager button { background: none; border: 1px solid var(--rule); color: var(--text); padding: 0.35rem 0.8rem; border-radius: var(--radius); font: inherit; cursor: pointer; }
+.pager button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.pager button:disabled { opacity: 0.4; cursor: default; }
+.pager__info { color: var(--muted); font-variant-numeric: tabular-nums; }
+
 .filter { width: min(320px, 100%); padding: 0.45rem 0.7rem; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--page); color: var(--text); font: inherit; }
 
 .tag { display: inline-block; font-size: 0.7rem; line-height: 1.4; font-weight: 600; padding: 0 0.4rem; margin-left: 0.35rem; border-radius: 3px; background: var(--accent); color: var(--accent-ink); vertical-align: middle; }

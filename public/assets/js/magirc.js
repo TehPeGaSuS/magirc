@@ -56,6 +56,7 @@
       return dir === 'desc' ? -r : r;
     });
     rows.forEach(function (r) { tbody.appendChild(r); });
+    if (table._pager) table._pager.go(1);
     Array.prototype.forEach.call(table.tHead.rows[0].cells, function (th, i) {
       if (i === index) th.setAttribute('aria-sort', dir === 'desc' ? 'descending' : 'ascending');
       else th.removeAttribute('aria-sort');
@@ -85,9 +86,52 @@
     input.addEventListener('input', function () {
       var q = input.value.trim().toLowerCase();
       Array.prototype.forEach.call(table.tBodies[0].rows, function (row) {
-        row.hidden = q !== '' && row.textContent.toLowerCase().indexOf(q) === -1;
+        row.dataset.filtered = (q !== '' && row.textContent.toLowerCase().indexOf(q) === -1) ? '1' : '';
       });
+      if (table._pager) table._pager.go(1); else applyVisibility(table);
     });
+  });
+
+  function applyVisibility(table) {
+    Array.prototype.forEach.call(table.tBodies[0].rows, function (row) {
+      row.hidden = row.dataset.filtered === '1' || row.dataset.paged === '1';
+    });
+  }
+
+  /* ---- Client-side paging --------------------------------------------- */
+  var pageSize = parseInt(root.getAttribute('data-page-size') || '50', 10);
+  function labelOf(name, fallback) {
+    var el = document.querySelector('[data-i18n-' + name + ']');
+    return el ? el.getAttribute('data-i18n-' + name) : fallback;
+  }
+  document.querySelectorAll('.table--paged').forEach(function (table) {
+    var tbody = table.tBodies[0];
+    if (!tbody || pageSize <= 0 || tbody.rows.length <= pageSize) return;
+    var nav = document.createElement('nav');
+    nav.className = 'pager';
+    nav.setAttribute('aria-label', labelOf('pager', 'Pages'));
+    var prev = document.createElement('button'); prev.type = 'button'; prev.textContent = labelOf('prev', 'Previous');
+    var next = document.createElement('button'); next.type = 'button'; next.textContent = labelOf('next', 'Next');
+    var info = document.createElement('span'); info.className = 'pager__info';
+    nav.appendChild(prev); nav.appendChild(info); nav.appendChild(next);
+    table.parentNode.insertBefore(nav, table.nextSibling);
+    var page = 1;
+    function go(n) {
+      // Page over the rows that survive the filter, in current DOM (sorted) order.
+      var rows = Array.prototype.filter.call(tbody.rows, function (r) { return r.dataset.filtered !== '1'; });
+      var pages = Math.max(1, Math.ceil(rows.length / pageSize));
+      page = Math.min(Math.max(1, n), pages);
+      rows.forEach(function (r, i) { r.dataset.paged = (i < (page - 1) * pageSize || i >= page * pageSize) ? '1' : ''; });
+      applyVisibility(table);
+      var from = rows.length ? (page - 1) * pageSize + 1 : 0, to = Math.min(page * pageSize, rows.length);
+      info.textContent = from + '\u2013' + to + ' / ' + rows.length;
+      prev.disabled = page <= 1; next.disabled = page >= pages;
+      nav.hidden = rows.length <= pageSize;
+    }
+    prev.addEventListener('click', function () { go(page - 1); if (nav.scrollIntoView) table.scrollIntoView({ block: 'start' }); });
+    next.addEventListener('click', function () { go(page + 1); table.scrollIntoView({ block: 'start' }); });
+    table._pager = { go: go };
+    go(1);
   });
 
   /* ---- Charts (ECharts) ------------------------------------------------ */

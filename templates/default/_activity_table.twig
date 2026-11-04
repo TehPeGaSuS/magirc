@@ -1,5 +1,5 @@
 {# Expects: rows (chanstats rows), kind ('channel' or 'account') #}
-<table class="table table--sortable">
+<table class="table table--sortable table--paged">
   <thead><tr>
     <th>{{ kind == 'channel' ? 'Channel'|t : 'Account'|t }}</th>
     <th class="num" data-sort="desc">{{ 'Lines'|t }}</th>

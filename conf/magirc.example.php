@@ -102,6 +102,10 @@ return [
         'hide_servers'  => [],
         // Show the user's realname on the user pages.
         'show_realname' => true,
+        // Rows per page in the long tables (users, channels, members). The
+        // browser does the paging, so sorting and filtering still cover the
+        // whole list. 0 disables paging.
+        'page_size' => 50,
         // Also list services operators (accounts with an oper type, online
         // or not) on the operators page. Off by default: it publishes the
         // account names of everyone with services access.
