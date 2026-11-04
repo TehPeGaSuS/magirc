@@ -75,6 +75,7 @@ final class TemplateExtension extends AbstractExtension
             new TwigFilter('ago', [$this, 'ago']),
             new TwigFilter('datetime', [$this, 'datetime']),
             new TwigFilter('prefix_name', [$this, 'prefixName']),
+            new TwigFilter('prefix_rank', [self::class, 'prefixRank']),
             new TwigFilter('irc_modes', fn (array $modes): string => implode(' ', array_map('strval', $modes))),
             new TwigFilter('irc_strip', [self::class, 'ircStrip']),
         ];
@@ -155,6 +156,17 @@ final class TemplateExtension extends AbstractExtension
             $flag .= mb_chr(0x1F1E6 + ord($ch) - ord('A'));
         }
         return '<span class="flag" aria-hidden="true">' . $flag . '</span>';
+    }
+
+    /** Sort weight of a status prefix string: owner 5 ... voice 1, none 0. */
+    public static function prefixRank(string $prefixes): int
+    {
+        foreach (['~' => 5, '&' => 4, '@' => 3, '%' => 2, '+' => 1] as $sym => $rank) {
+            if (str_contains($prefixes, $sym)) {
+                return $rank;
+            }
+        }
+        return 0;
     }
 
     /** Human name of a status prefix: "@" -> "op". */

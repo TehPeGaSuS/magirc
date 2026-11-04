@@ -43,7 +43,7 @@
     {% for m in members %}
       <tr>
         <td data-sort-value="{{ m.nick|lower }}"><a href="{{ url_for('user', {nick: m.nick}) }}">{{ m.nick }}</a>{% if m.user.oper %} <span class="tag">{{ 'oper'|t }}</span>{% endif %}{% if m.user.away %} <span class="tag tag--quiet">{{ 'away'|t }}</span>{% endif %}</td>
-        <td data-sort-value="{{ m.prefixes|length }}">{% if m.prefixes %}<span class="mono">{{ m.prefixes }}</span> {{ m.prefixes|prefix_name }}{% endif %}</td>
+        <td data-sort-value="{{ m.prefixes|prefix_rank }}">{% if m.prefixes %}<span title="{{ m.prefixes }}">{{ m.prefixes|prefix_name }}</span>{% endif %}</td>
         <td class="mono small">{{ m.user.ident }}@{{ m.user.vhost ?? m.user.chost ?? m.user.host }}</td>
         {% if cfg.display.show_realname %}<td class="small">{{ m.user.real|irc_strip }}</td>{% endif %}
         <td><a href="{{ url_for('server', {server: m.user.server}) }}">{{ m.user.server }}</a></td>

@@ -28,7 +28,7 @@
     {% for c in channels %}
       <tr>
         <td data-sort-value="{{ c.name|lower }}"><a href="{{ url_for('channel', {channel: c.name|trim('#', 'left')}) }}">{{ c.name }}</a></td>
-        <td data-sort-value="{{ c.prefixes|length }}">{% if c.prefixes %}<span class="mono">{{ c.prefixes }}</span> {{ c.prefixes|prefix_name }}{% endif %}</td>
+        <td data-sort-value="{{ c.prefixes|prefix_rank }}">{% if c.prefixes %}<span title="{{ c.prefixes }}">{{ c.prefixes|prefix_name }}</span>{% endif %}</td>
         <td class="num" data-sort-value="{{ c.channel.usercount }}">{{ c.channel.usercount }}</td>
         <td class="topic">{{ c.channel.topic.value|default('') }}</td>
       </tr>
