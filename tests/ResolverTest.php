@@ -42,5 +42,8 @@ final class ResolverTest extends TestCase
         self::assertSame('Alemanha', $r->lookup('2a01:4f8::1')['name'], 'names follow the locale');
         $r->setLocale('en_US');
         self::assertSame('Germany', $r->lookup('2a01:4f8::1')['name']);
+        $r->setLocale('pt_PT', static fn (string $en): string => $en === 'Germany' ? 'Alemanha (override)' : $en);
+        self::assertSame('Alemanha (override)', $r->lookup('2a01:4f8::1')['name'], 'a .po translation of the English name wins');
+        self::assertSame('Portugal', $r->lookup('193.136.1.1')['name'], 'untranslated names fall back to the database locale');
     }
 }

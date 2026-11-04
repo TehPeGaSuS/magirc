@@ -37,11 +37,8 @@ final class App
         $container->set('locale', $locales->default());
         // Translator and Twig are built per request for the resolved locale
         // (see the locale middleware); Twig::class holds the current one.
-        $container->set('twig.factory', static fn (Container $c): \Closure => static function () use ($c, $services, $locales): Twig {
-            $translator = Translator::load($services->rootDir . '/locale', (string) $c->get('locale'));
-            $c->set(Translator::class, $translator);
-            return self::twig($services, $translator, $locales);
-        });
+        $container->set(Translator::class, static fn (Container $c) => Translator::load($services->rootDir . '/locale', (string) $c->get('locale')));
+        $container->set('twig.factory', static fn (Container $c): \Closure => static fn (): Twig => self::twig($services, $c->get(Translator::class), $locales));
         $container->set(Twig::class, static fn (Container $c): Twig => ($c->get('twig.factory'))());
 
         AppFactory::setContainer($container);
@@ -54,11 +51,13 @@ final class App
         $app->addRoutingMiddleware();
         // Decide the request locale first, then build Twig (and the translator)
         // for it; TwigMiddleware::createFromContainer would build Twig too early.
-        $app->add(function (ServerRequestInterface $request, $handler) use ($app, $container, $locales) {
+        $app->add(function (ServerRequestInterface $request, $handler) use ($app, $container, $locales, $services) {
             $locale = $locales->resolve($request);
             $container->set('locale', $locale);
             \Locale::setDefault($locale);
-            $services->geoip()->setLocale($locale);
+            $translator = Translator::load($services->rootDir . '/locale', $locale);
+            $container->set(Translator::class, $translator);
+            $services->geoip()->setLocale($locale, static fn (string $name): string => $translator->t($name));
             $twig = ($container->get('twig.factory'))();
             $container->set(Twig::class, $twig);
             return (new TwigMiddleware($twig, $app->getRouteCollector()->getRouteParser(), $app->getBasePath()))->process($request, $handler);

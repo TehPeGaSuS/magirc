@@ -22,17 +22,22 @@ final class Resolver
     /** @var list<string> GeoLite2 name locales, most wanted first. */
     private array $locales = ['en'];
 
+    /** @var null|callable(string): string Translates an English country name; returns it unchanged when there is no translation. */
+    private $translate = null;
+
     public function __construct(private readonly string $databasePath)
     {
     }
 
     /**
-     * Country names in this language when the database has them (GeoLite2
-     * ships de, en, es, fr, ja, pt-BR, ru, zh-CN). Portuguese gets the pt-BR
-     * names, which are the same for countries, then English as fallback.
+     * Country names in this language. A translation of the English name in
+     * the site's .po file wins (that is how pt_PT fixes the names GeoLite2
+     * only has in pt-BR); otherwise the database's own localized name is
+     * used (GeoLite2 ships de, en, es, fr, ja, pt-BR, ru, zh-CN), then English.
      */
-    public function setLocale(string $locale): void
+    public function setLocale(string $locale, ?callable $translate = null): void
     {
+        $this->translate = $translate;
         $tag = str_replace('_', '-', $locale);
         $lang = strtolower(explode('-', $tag)[0]);
         $candidates = [$tag, $lang];
@@ -74,7 +79,14 @@ final class Resolver
             $this->reader ??= new Reader($this->databasePath, $this->locales);
             $record = $this->reader->country($address);
             $code = strtolower((string) $record->country->isoCode);
+            $english = (string) ($record->country->names['en'] ?? $record->country->name);
             $name = (string) $record->country->name;
+            if ($this->translate !== null && $english !== '') {
+                $translated = ($this->translate)($english);
+                if ($translated !== $english) {
+                    $name = $translated;
+                }
+            }
             return $this->cache[$address] = $code === '' ? $unknown : ['code' => $code, 'name' => $name];
         } catch (AddressNotFoundException) {
             return $this->cache[$address] = $unknown;
