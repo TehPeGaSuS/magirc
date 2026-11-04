@@ -18,7 +18,7 @@
 </dl>
 
 {% if has_stats %}
-<p><a class="button" href="{{ url_for('activity.channel', {channel: channel.name|trim('#', 'left')}) }}">{{ 'Activity statistics'|t }}</a></p>
+<p><a class="button" href="{{ url_for('activity.channel', {channel: channel.name|channel_slug}) }}">{{ 'Activity statistics'|t }}</a></p>
 {% endif %}
 
 {% if countries %}

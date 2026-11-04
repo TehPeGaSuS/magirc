@@ -77,7 +77,7 @@ final class ActivityController extends Controller
     public function user(Request $request, Response $response, array $args): Response
     {
         $stats = $this->stats();
-        $account = rawurldecode($args['account']);
+        $account = $args['account'];
         if (!$stats->userHasStats($account)) {
             $this->notFound('There are no activity statistics for "' . $account . '".');
         }

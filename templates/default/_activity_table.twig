@@ -15,7 +15,7 @@
   {% for r in rows %}
     <tr>
       <td data-sort-value="{{ (kind == 'channel' ? r.channel : r.account)|lower }}">
-        {% if kind == 'channel' %}<a href="{{ url_for('activity.channel', {channel: r.channel|trim('#', 'left')}) }}?period={{ period }}">{{ r.channel }}</a>
+        {% if kind == 'channel' %}<a href="{{ url_for('activity.channel', {channel: r.channel|channel_slug}) }}?period={{ period }}">{{ r.channel }}</a>
         {% else %}<a href="{{ url_for('activity.user', {account: r.account}) }}?period={{ period }}">{{ r.account }}</a>{% endif %}
       </td>
       <td class="num" data-sort-value="{{ r.lines }}">{{ r.lines|format_number }}</td>

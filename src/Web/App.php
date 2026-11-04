@@ -60,7 +60,7 @@ final class App
             $services->geoip()->setLocale($locale, static fn (string $name): string => $translator->t($name));
             $twig = ($container->get('twig.factory'))();
             $container->set(Twig::class, $twig);
-            return (new TwigMiddleware($twig, $app->getRouteCollector()->getRouteParser(), $app->getBasePath()))->process($request, $handler);
+            return (new TwigMiddleware($twig, new EncodingRouteParser($app->getRouteCollector()->getRouteParser()), $app->getBasePath()))->process($request, $handler);
         });
         $errorMiddleware = $app->addErrorMiddleware($config->bool('app.debug'), true, true);
         // Twig is resolved lazily so the request locale is known by the time it is built.
@@ -109,14 +109,14 @@ final class App
         $app->get('/servers/{server}', [ServersController::class, 'show'])->setName('server');
 
         $app->get('/channels', [ChannelsController::class, 'index'])->setName('channels');
-        $app->get('/channels/{channel}', [ChannelsController::class, 'show'])->setName('channel');
+        $app->get('/channels/{channel:.+}', [ChannelsController::class, 'show'])->setName('channel');
 
         $app->get('/users', [UsersController::class, 'index'])->setName('users');
         $app->get('/users/{nick}', [UsersController::class, 'show'])->setName('user');
         $app->get('/operators', [OperatorsController::class, 'index'])->setName('operators');
 
         $app->get('/activity', [ActivityController::class, 'index'])->setName('activity');
-        $app->get('/activity/channels/{channel}', [ActivityController::class, 'channel'])->setName('activity.channel');
+        $app->get('/activity/channels/{channel:.+}', [ActivityController::class, 'channel'])->setName('activity.channel');
         $app->get('/activity/users/{account}', [ActivityController::class, 'user'])->setName('activity.user');
 
         $app->get('/api/status', [HomeController::class, 'apiStatus'])->setName('api.status');

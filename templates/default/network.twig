@@ -34,7 +34,7 @@
       <tbody>
       {% for c in top_channels %}
         <tr>
-          <td><a href="{{ url_for('channel', {channel: c.name|trim('#', 'left')}) }}">{{ c.name }}</a></td>
+          <td><a href="{{ url_for('channel', {channel: c.name|channel_slug}) }}">{{ c.name }}</a></td>
           <td class="num">{{ c.usercount }}</td>
           <td class="topic">{{ c.topic.value|default('')|irc_strip }}</td>
         </tr>

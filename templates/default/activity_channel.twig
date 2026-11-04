@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>{{ channel }} <span class="muted h-sub">{{ 'activity'|t }}</span></h1>
-{% if live %}<p class="lead">{{ _n('%s user in the channel right now.', '%s users in the channel right now.', live.usercount)|format(live.usercount) }} <a href="{{ url_for('channel', {channel: channel|trim('#', 'left')}) }}">{{ 'Channel page'|t }}</a></p>{% endif %}
+{% if live %}<p class="lead">{{ _n('%s user in the channel right now.', '%s users in the channel right now.', live.usercount)|format(live.usercount) }} <a href="{{ url_for('channel', {channel: channel|channel_slug}) }}">{{ 'Channel page'|t }}</a></p>{% endif %}
 {% include '_period.twig' %}
 
 {% if totals %}

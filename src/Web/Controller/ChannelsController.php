@@ -49,11 +49,15 @@ final class ChannelsController extends Controller
         return $this->json($response, $this->list());
     }
 
-    /** Accepts "chat" or "#chat" in URLs; "#" is awkward in links. */
-    public static function channelName(string $raw): string
+    /**
+     * Reverses TemplateExtension::channelSlug: "chat" is #chat, while a slug
+     * that starts with "#" is the whole name ("/channels/%23" is #,
+     * "/channels/%23%23ChatLand" is ##ChatLand). Slim has already decoded
+     * the path.
+     */
+    public static function channelName(string $slug): string
     {
-        $raw = rawurldecode($raw);
-        return str_starts_with($raw, '#') || str_starts_with($raw, '&') ? $raw : '#' . $raw;
+        return str_starts_with($slug, '#') ? $slug : '#' . $slug;
     }
 
     /** @return list<array<string, mixed>> */

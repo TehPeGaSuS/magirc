@@ -106,6 +106,7 @@ final class TemplateExtension extends AbstractExtension
             new TwigFilter('prefix_rank', [self::class, 'prefixRank']),
             new TwigFilter('irc_modes', fn (array $modes): string => implode(' ', array_map('strval', $modes))),
             new TwigFilter('irc_strip', [self::class, 'ircStrip']),
+            new TwigFilter('channel_slug', [self::class, 'channelSlug']),
         ];
     }
 
@@ -185,6 +186,18 @@ final class TemplateExtension extends AbstractExtension
     private static function patternLetters(string $pattern): string
     {
         return (string) preg_replace("/'[^']*'/", '', $pattern);
+    }
+
+    /**
+     * URL form of a channel name: "#chat" becomes "chat". Names where that
+     * would leave nothing or another "#" ("#", "##", "##ChatLand") keep the
+     * whole name, which url_for encodes as %23. A slug that starts with "#"
+     * is therefore always a whole name (see ChannelsController::channelName).
+     */
+    public static function channelSlug(string $name): string
+    {
+        $rest = substr($name, 1);
+        return str_starts_with($name, '#') && $rest !== '' && !str_starts_with($rest, '#') ? $rest : $name;
     }
 
     /** Regional-indicator emoji for an ISO country code; empty when unknown. */
