@@ -209,6 +209,24 @@ final class Store
     }
 
     /**
+     * Peaks raised to the current counts where those are higher, so a record
+     * set since the last sample shows at once instead of "5, peak 4".
+     *
+     * @param array<string, array{count: int, time: int}> $peaks
+     * @param array<string, int> $counts
+     * @return array<string, array{count: int, time: int}>
+     */
+    public static function withCurrent(array $peaks, array $counts, int $time): array
+    {
+        foreach ($counts as $type => $count) {
+            if (isset($peaks[$type]) && $count > $peaks[$type]['count']) {
+                $peaks[$type] = ['count' => $count, 'time' => $time];
+            }
+        }
+        return $peaks;
+    }
+
+    /**
      * Sets a peak by hand, e.g. Anope's "Maximum users" from before MagIRC
      * was installed (bin/magirc peak). Overwrites whatever is recorded.
      */

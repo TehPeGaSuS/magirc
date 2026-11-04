@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Magirc\Web\Controller;
 
 use League\CommonMark\CommonMarkConverter;
+use Magirc\History\Store;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -34,7 +35,7 @@ final class HomeController extends Controller
 
         return $this->render($response, 'network.twig', [
             'counts' => $counts,
-            'peaks' => $store->peaks(),
+            'peaks' => Store::withCurrent($store->peaks(), $counts, $snapshot->time),
             'history' => ['day' => $day, 'week' => $week, 'month' => $month],
             'last_sample' => $store->lastSampleTime(),
             'top_servers' => array_slice($servers, 0, 5),
@@ -138,7 +139,7 @@ final class HomeController extends Controller
         return $this->json($response, [
             'time' => $snapshot->time,
             'counts' => $snapshot->counts(),
-            'peaks' => $this->services->store()->peaks(),
+            'peaks' => Store::withCurrent($this->services->store()->peaks(), $snapshot->counts(), $snapshot->time),
         ]);
     }
 

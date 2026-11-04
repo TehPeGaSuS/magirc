@@ -62,6 +62,14 @@ final class StoreTest extends TestCase
         $this->store->setPeak('bogus', 1, 1);
     }
 
+    public function testCurrentCountsRaiseShownPeaks(): void
+    {
+        $peaks = ['users' => ['count' => 10, 'time' => 100], 'servers' => ['count' => 4, 'time' => 100]];
+        $shown = Store::withCurrent($peaks, ['users' => 8, 'servers' => 5], 200);
+        self::assertSame(['count' => 10, 'time' => 100], $shown['users']);
+        self::assertSame(['count' => 5, 'time' => 200], $shown['servers']);
+    }
+
     public function testRecordingTheSameTimeTwiceIsIdempotent(): void
     {
         $this->store->record($this->snapshot(1000, 5));
