@@ -19,6 +19,7 @@ final class OperatorsController extends Controller
                 'host' => (string) ($u['vhost'] ?? $u['chost'] ?? $u['host'] ?? ''),
                 'real' => (string) ($u['real'] ?? ''),
                 'server' => (string) ($u['server'] ?? ''),
+                'server_hidden' => (bool) ($u['server_hidden'] ?? false),
                 'account' => $u['account']['display'] ?? null,
                 'opertype' => $u['account']['opertype'] ?? null,
                 'away' => $u['away'] ?? null,

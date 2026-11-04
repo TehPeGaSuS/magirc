@@ -56,6 +56,7 @@ final class UsersController extends Controller
                 'host' => (string) ($u['vhost'] ?? $u['chost'] ?? $u['host'] ?? ''),
                 'real' => (string) ($u['real'] ?? ''),
                 'server' => (string) ($u['server'] ?? ''),
+                'server_hidden' => (bool) ($u['server_hidden'] ?? false),
                 'account' => $u['account']['display'] ?? null,
                 'oper' => $u['oper'],
                 'tls' => (bool) ($u['tls'] ?? false),

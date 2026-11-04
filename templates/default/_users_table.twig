@@ -19,7 +19,7 @@
       </td>
       <td class="mono small">{{ u.ident }}@{{ u.vhost ?? u.chost ?? u.host }}</td>
       {% if cfg.display.show_realname %}<td class="small">{{ u.real|irc_strip }}</td>{% endif %}
-      {% if show_server %}<td><a href="{{ url_for('server', {server: u.server}) }}">{{ u.server }}</a></td>{% endif %}
+      {% if show_server %}<td>{% if u.server_hidden %}{{ u.server }}{% else %}<a href="{{ url_for('server', {server: u.server}) }}">{{ u.server }}</a>{% endif %}</td>{% endif %}
       <td class="num" data-sort-value="{{ u.channels|length }}">{{ u.channels|length }}</td>
       <td data-sort-value="{{ u.signon }}">{{ (snapshot_time - u.signon)|duration }}</td>
     </tr>

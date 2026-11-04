@@ -97,7 +97,10 @@ return [
         'hide_secret_channels'  => true,
         'hide_private_channels' => true,
         'hide_ulined'           => true,
-        // Channels and servers to hide regardless of modes.
+        // Channels to hide regardless of modes (left out of lists and counts),
+        // and servers to leave out of the server list and server count. Users
+        // on a hidden server still count and are listed, just without a link
+        // to the server.
         'hide_channels' => ['#opers', '#services'],
         'hide_servers'  => [],
         // Show the user's realname on the user pages.

@@ -46,7 +46,7 @@
         <td data-sort-value="{{ m.prefixes|prefix_rank }}">{% if m.prefixes %}<span title="{{ m.prefixes }}">{{ m.prefixes|prefix_name }}</span>{% endif %}</td>
         <td class="mono small">{{ m.user.ident }}@{{ m.user.vhost ?? m.user.chost ?? m.user.host }}</td>
         {% if cfg.display.show_realname %}<td class="small">{{ m.user.real|irc_strip }}</td>{% endif %}
-        <td><a href="{{ url_for('server', {server: m.user.server}) }}">{{ m.user.server }}</a></td>
+        <td>{% if m.user.server_hidden %}{{ m.user.server }}{% else %}<a href="{{ url_for('server', {server: m.user.server}) }}">{{ m.user.server }}</a>{% endif %}</td>
         <td data-sort-value="{{ m.user.signon }}">{{ (snapshot_time - m.user.signon)|duration }}</td>
       </tr>
     {% endfor %}

@@ -25,7 +25,7 @@
       </td>
       <td class="mono small">{{ u.ident }}@{{ u.host }}</td>
       {% if cfg.display.show_realname %}<td class="small">{{ u.real|irc_strip }}</td>{% endif %}
-      <td><a href="{{ url_for('server', {server: u.server}) }}">{{ u.server }}</a></td>
+      <td>{% if u.server_hidden %}{{ u.server }}{% else %}<a href="{{ url_for('server', {server: u.server}) }}">{{ u.server }}</a>{% endif %}</td>
       {% if cfg.geoip %}<td data-sort-value="{{ u.country_name }}">{{ flag(u.country) }} {{ u.country_name ?: '—' }}</td>{% endif %}
       <td class="num" data-sort-value="{{ u.channels }}">{{ u.channels }}</td>
       <td data-sort-value="{{ u.signon }}">{{ (snapshot_time - u.signon)|duration }}</td>

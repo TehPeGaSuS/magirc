@@ -88,8 +88,12 @@ final class Network
             $u['registered'] = is_array($u['account'] ?? null) && ($u['account']['display'] ?? '') !== '';
             // hidden: never counted nor listed (services clients, hidden servers).
             // listed: appears in user lists; counts include unlisted users too.
-            $u['hidden'] = ($u['ulined'] && $hideUlined) || ($srv[$serverKey]['hidden'] ?? false);
+            // Users on U-lined servers are services pseudo-clients, not people.
+            // A server in display.hide_servers hides the server only; its
+            // users still count and are listed (without a link to it).
+            $u['hidden'] = $u['ulined'] && $hideUlined;
             $u['listed'] = !$u['hidden'] && (!$registeredUsers || $u['registered']);
+            $u['server_hidden'] = $srv[$serverKey]['hidden'] ?? false;
             $u['channels'] = is_array($u['channels'] ?? null) ? $u['channels'] : [];
             $u['modes'] = is_array($u['modes'] ?? null) ? $u['modes'] : [];
             $usr[$key] = $u;
