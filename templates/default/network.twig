@@ -53,7 +53,7 @@
       <thead><tr><th>{{ 'Server'|t }}</th><th class="num">{{ 'Users'|t }}</th></tr></thead>
       <tbody>
       {% for s in top_servers %}
-        <tr><td><a href="{{ url_for('server', {server: s.name}) }}">{{ s.name }}</a><br><span class="muted small">{{ s.description }}</span></td><td class="num">{{ s.usercount }}</td></tr>
+        <tr><td><a href="{{ url_for('server', {server: s.name}) }}">{{ s.name }}</a><br><span class="muted small">{{ s.description|irc_strip }}</span></td><td class="num">{{ s.usercount }}</td></tr>
       {% endfor %}
       </tbody>
     </table>

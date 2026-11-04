@@ -3,7 +3,7 @@
 {% block content %}
 <h1>{{ title }}</h1>
 {% if server %}
-  <p class="lead">{{ server.description }}</p>
+  <p class="lead">{{ server.description|irc_strip }}</p>
   <dl class="props">
     <div><dt>{{ 'Status'|t }}</dt><dd>{% if online %}<span class="status status--on">{{ 'linked'|t }}</span>{% else %}<span class="status status--off">{{ 'offline'|t }}</span>{% endif %}</dd></div>
     {% if seen and seen.linked_since %}<div><dt>{{ 'Linked since'|t }}</dt><dd>{{ seen.linked_since|datetime }} <span class="muted">({{ (snapshot_time - seen.linked_since)|duration }})</span></dd></div>{% endif %}
