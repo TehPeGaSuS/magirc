@@ -6,5 +6,5 @@ namespace Magirc;
 
 final class Version
 {
-    public const STRING = '2.0.0-beta.2';
+    public const STRING = '2.0.0';
 }
