@@ -60,6 +60,12 @@ MagIRC 2 is a rewrite of the PHP 5 era MagIRC 1.x. It reads live data from Anope
 
    The `data/` and `tmp/` directories must be writable by the web server user and by the user running cron.
 
+   The peaks start from your first sample. To carry over an older one, such as Anope's "Maximum users" from `/msg OperServ STATS` (no RPC method returns it), set it once:
+
+       php bin/magirc peak users 5478 "2019-10-10 11:09:41 +0200"
+
+   `php bin/magirc peak` alone lists the recorded peaks. A higher sample still replaces a peak set this way.
+
 ## Optional: country statistics
 
 MagIRC looks up each user's address in a GeoLite2 Country database. Set `geoip.database` to the path of the `.mmdb` file. To let MagIRC download and refresh it, create a free account at https://www.maxmind.com/en/geolite2/signup, generate a license key, set `geoip.account_id` and `geoip.license_key`, and run weekly from cron:

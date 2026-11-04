@@ -51,6 +51,17 @@ final class StoreTest extends TestCase
         self::assertSame(7, $history[1]['users'], 'average of 9 and 4, rounded');
     }
 
+    public function testSetPeakByHand(): void
+    {
+        $this->store->record($this->snapshot(1000, 9));
+        $this->store->setPeak('users', 50, 500);
+        self::assertSame(['count' => 50, 'time' => 500], $this->store->peaks()['users']);
+        $this->store->record($this->snapshot(2000, 60));
+        self::assertSame(['count' => 60, 'time' => 2000], $this->store->peaks()['users'], 'a higher sample still beats it');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->store->setPeak('bogus', 1, 1);
+    }
+
     public function testRecordingTheSameTimeTwiceIsIdempotent(): void
     {
         $this->store->record($this->snapshot(1000, 5));

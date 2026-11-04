@@ -208,6 +208,19 @@ final class Store
         return $v === null || $v === false ? 0 : (int) $v;
     }
 
+    /**
+     * Sets a peak by hand, e.g. Anope's "Maximum users" from before MagIRC
+     * was installed (bin/magirc peak). Overwrites whatever is recorded.
+     */
+    public function setPeak(string $type, int $count, int $time): void
+    {
+        if (!in_array($type, self::PEAK_TYPES, true)) {
+            throw new \InvalidArgumentException("Unknown peak type: $type");
+        }
+        $this->pdo->prepare('DELETE FROM magirc_peaks WHERE type = ?')->execute([$type]);
+        $this->pdo->prepare('INSERT INTO magirc_peaks (type, count, time) VALUES (?, ?, ?)')->execute([$type, $count, $time]);
+    }
+
     private function updatePeak(string $type, int $count, int $time): void
     {
         $stmt = $this->pdo->prepare('SELECT count FROM magirc_peaks WHERE type = ?');

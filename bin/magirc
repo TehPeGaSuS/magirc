@@ -12,6 +12,7 @@ require $root . '/vendor/autoload.php';
 
 use Magirc\Console\CheckCommand;
 use Magirc\Console\GeoipUpdateCommand;
+use Magirc\Console\PeakCommand;
 use Magirc\Console\SampleCommand;
 use Symfony\Component\Console\Application;
 
@@ -19,4 +20,5 @@ $app = new Application('MagIRC', Magirc\Version::STRING);
 $app->add(new CheckCommand($root));
 $app->add(new SampleCommand($root));
 $app->add(new GeoipUpdateCommand($root));
+$app->add(new PeakCommand($root));
 $app->run();
