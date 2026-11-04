@@ -85,6 +85,18 @@ final class Snapshot
         return array_filter($this->users, static fn (array $u): bool => $u['oper'] && !$u['hidden']);
     }
 
+    /**
+     * Servers and channels kept off the site by configuration (hide_servers,
+     * hide_channels, secret/private), U-lined servers not included.
+     * @return array{servers: int, channels: int}
+     */
+    public function hiddenCounts(): array
+    {
+        $servers = count(array_filter($this->servers, static fn (array $s): bool => $s['hidden'] && !$s['ulined']));
+        $channels = count(array_filter($this->channels, static fn (array $c): bool => $c['hidden']));
+        return ['servers' => $servers, 'channels' => $channels];
+    }
+
     /** @return array{users: int, channels: int, servers: int, operators: int} */
     public function counts(): array
     {

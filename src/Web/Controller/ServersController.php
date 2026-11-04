@@ -14,6 +14,7 @@ final class ServersController extends Controller
         return $this->render($response, 'servers.twig', [
             'title' => 'Servers',
             'servers' => $this->list(),
+            'hidden' => $this->snapshot()->hiddenCounts(),
         ]);
     }
 

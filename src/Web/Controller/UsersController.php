@@ -15,6 +15,7 @@ final class UsersController extends Controller
             'title' => 'Users',
             'users' => $this->list(),
             'total' => count($this->snapshot()->countedUsers()),
+            'hidden' => $this->snapshot()->hiddenCounts(),
         ]);
     }
 

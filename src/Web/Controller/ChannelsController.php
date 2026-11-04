@@ -15,6 +15,7 @@ final class ChannelsController extends Controller
             'title' => 'Channels',
             'channels' => $this->list(),
             'total' => count($this->snapshot()->countedChannels()),
+            'hidden' => $this->snapshot()->hiddenCounts(),
         ]);
     }
 
