@@ -31,7 +31,7 @@ MagIRC 1.x read the `irc2sql` tables. `irc2sql` was removed in Anope 2.1.16
 | `.signon` | `.signon` | unix time |
 | `.modes` | `.modes` (array, e.g. `["+xiw"]`) | IRC operator = `o` in modes |
 | `.account` | `.account.display`, `.account.uniqueid`, `.account.opertype` | `null` when not logged in |
-| `.away` / `.awaymsg` | `.away.time` / `.away.message` or `null` | not exercised in the test (see gaps) |
+| `.away` / `.awaymsg` | `.away.time` / `.away.message` or `null` | inverted in Anope 2.1 (see gaps) |
 | `.secure` | `.tls` | |
 | `.fingerprint` | `.fingerprint` | |
 | `.server` | `.server` | |
@@ -95,8 +95,12 @@ and also gives "yesterday"/"last week" comparisons.
   column, no CTCP probing.
 * **GeoIP**: MagIRC 2 does the lookup itself from `address` (GeoLite2
   country database via the `maxminddb` PHP extension or `geoip2/geoip2`).
-* **Away state**: field exists; not confirmed end-to-end in the test
-  (UnrealIRCd did relay nothing for a test AWAY). Treat as best-effort.
+* **Away state**: Anope 2.1's `User::IsAway()` returns `awaymsg.empty()`,
+  so rpc_data sends `away: null` for away users and `{message: "", time: 0}`
+  for everyone else. A real away record always has a message, so MagIRC
+  treats one empty record in the snapshot as proof of the bug and inverts
+  the field; the message and time of away users are lost until Anope is
+  fixed. Once it is, the normal reading applies again on its own.
 * **Server version / uptime / splits**: not available; those columns go, or
   MagIRC records link/unlink times itself from successive samples.
 * **History and peaks**: MagIRC's own sampler, no MySQL events, no

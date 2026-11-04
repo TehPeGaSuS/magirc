@@ -79,6 +79,18 @@ final class Network
             $srv[$key] = $s;
         }
 
+        // Anope 2.1's User::IsAway() is inverted (it returns awaymsg.empty()),
+        // so rpc_data sends away: null for away users and an empty
+        // {message: "", time: 0} for everyone else. A real away state always
+        // has a message, so one empty record means the bug is present.
+        $awayInverted = false;
+        foreach ($users as $u) {
+            if (is_array($u['away'] ?? null) && (string) ($u['away']['message'] ?? '') === '') {
+                $awayInverted = true;
+                break;
+            }
+        }
+
         $usr = [];
         foreach ($users as $nick => $u) {
             $key = mb_strtolower((string) $nick);
@@ -87,6 +99,7 @@ final class Network
             $u['ulined'] = $srv[$serverKey]['ulined'] ?? false;
             $u['oper'] = self::hasMode($u['modes'] ?? [], 'o');
             $u['bot'] = $botMode !== '' && self::hasMode($u['modes'] ?? [], $botMode);
+            $u['away'] = self::away($u['away'] ?? null, $awayInverted);
             $u['registered'] = is_array($u['account'] ?? null) && ($u['account']['display'] ?? '') !== '';
             // hidden: never counted nor listed (services clients, hidden servers).
             // listed: appears in user lists; counts include unlisted users too.
@@ -140,6 +153,23 @@ final class Network
      * set when its letter appears in the first word of any entry.
      * @param list<mixed> $modes
      */
+    /**
+     * Normalised away state: null, or message and time (the message is ''
+     * and the time 0 when an inverted Anope hid them).
+     *
+     * @return null|array{message: string, time: int}
+     */
+    public static function away(mixed $away, bool $inverted): ?array
+    {
+        if ($inverted) {
+            return $away === null ? ['message' => '', 'time' => 0] : null;
+        }
+        if (!is_array($away) || (string) ($away['message'] ?? '') === '') {
+            return null;
+        }
+        return ['message' => (string) $away['message'], 'time' => (int) ($away['time'] ?? 0)];
+    }
+
     public static function hasMode(array $modes, string $letter): bool
     {
         foreach ($modes as $entry) {

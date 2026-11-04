@@ -54,6 +54,25 @@ final class NetworkTest extends TestCase
         self::assertFalse($s->user('bob')['bot'], 'an empty bot_umode turns it off');
     }
 
+    public function testAwayState(): void
+    {
+        [$users, $channels, $servers] = $this->fixture();
+        $users['Alice']['away'] = ['message' => 'lunch', 'time' => 50];
+        $users['Bob']['away'] = null;
+        $users['ChanServ']['away'] = null;
+        $s = $this->network()->build(100, $users, $channels, $servers);
+        self::assertSame(['message' => 'lunch', 'time' => 50], $s->user('alice')['away']);
+        self::assertNull($s->user('bob')['away']);
+
+        // Anope 2.1 with the inverted IsAway(): away users get null, the rest an empty record.
+        $users['Alice']['away'] = null;
+        $users['Bob']['away'] = ['message' => '', 'time' => 0];
+        $users['ChanServ']['away'] = ['message' => '', 'time' => 0];
+        $s = $this->network()->build(100, $users, $channels, $servers);
+        self::assertSame(['message' => '', 'time' => 0], $s->user('alice')['away'], 'null means away when the bug is detected');
+        self::assertNull($s->user('bob')['away']);
+    }
+
     public function testRegisteredOnlyIsTheDefault(): void
     {
         [$users, $channels, $servers] = $this->fixture();
