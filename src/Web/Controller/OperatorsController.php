@@ -28,8 +28,16 @@ final class OperatorsController extends Controller
         }
         usort($rows, static fn (array $a, array $b): int => strcasecmp($a['nick'], $b['nick']));
 
-        // Services operators (accounts with an oper type) may be offline; list them too.
+        // Services operators (accounts with an oper type) may be offline; list
+        // them only when the site owner opted in, since it reveals staff accounts.
         $services = [];
+        if (!$this->services->config->bool('display.show_services_opers', false)) {
+            return $this->render($response, 'operators.twig', [
+                'title' => 'Operators',
+                'operators' => $rows,
+                'services_opers' => [],
+            ]);
+        }
         try {
             $opers = $this->services->rpc()->call('anope.listOpers', ['full']);
             if (is_array($opers)) {

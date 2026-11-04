@@ -102,6 +102,10 @@ return [
         'hide_servers'  => [],
         // Show the user's realname on the user pages.
         'show_realname' => true,
+        // Also list services operators (accounts with an oper type, online
+        // or not) on the operators page. Off by default: it publishes the
+        // account names of everyone with services access.
+        'show_services_opers' => false,
     ],
 
     // ---- Application ------------------------------------------------------
