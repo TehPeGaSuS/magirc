@@ -22,6 +22,7 @@ final class OperatorsController extends Controller
                 'server_hidden' => (bool) ($u['server_hidden'] ?? false),
                 'account' => $u['account']['display'] ?? null,
                 'opertype' => $u['account']['opertype'] ?? null,
+                'bot' => (bool) ($u['bot'] ?? false),
                 'away' => $u['away'] ?? null,
                 'signon' => (int) ($u['signon'] ?? 0),
                 'country' => $geo->lookup($u['address'] ?? null)['code'],

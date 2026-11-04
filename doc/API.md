@@ -9,7 +9,7 @@ All endpoints are `GET`, return `application/json` and are served from the same 
 | `/api/history?range=...&server=NAME` | `[{time, users}, ...]` for one server |
 | `/api/servers` | `[{name, description, online, users, operators, uplink, linked_since, last_seen}, ...]` |
 | `/api/channels` | `[{name, users, topic, modes, registered, created}, ...]` (visible channels only) |
-| `/api/users` | `[{nick, ident, host, real, server, account, oper, tls, away, signon, channels, country, country_name}, ...]` |
+| `/api/users` | `[{nick, ident, host, real, server, account, oper, bot, tls, away, signon, channels, country, country_name}, ...]` |
 | `/api/countries` | `[{code, name, count, percent}, ...]` |
 
 Times are unix timestamps. Hidden channels (secret, private or listed in `display.hide_channels`) and users on U-lined servers are never included.

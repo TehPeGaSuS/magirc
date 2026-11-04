@@ -60,6 +60,7 @@ final class UsersController extends Controller
                 'server_hidden' => (bool) ($u['server_hidden'] ?? false),
                 'account' => $u['account']['display'] ?? null,
                 'oper' => $u['oper'],
+                'bot' => (bool) ($u['bot'] ?? false),
                 'tls' => (bool) ($u['tls'] ?? false),
                 'away' => $u['away'] ?? null,
                 'signon' => (int) ($u['signon'] ?? 0),
