@@ -29,6 +29,8 @@ final class App
     public static function create(Services $services): SlimApp
     {
         $config = $services->config;
+        // Number and date formatting (intl) follow the configured locale.
+        \Locale::setDefault(str_replace('-', '_', $config->string('display.locale', 'en_US')));
         $container = new Container();
         $container->set(Services::class, $services);
         $container->set(Translator::class, static fn () => Translator::fromConfig($services));

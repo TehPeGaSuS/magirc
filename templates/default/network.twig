@@ -5,7 +5,7 @@
   <div class="hero__figure">
     <p class="hero__number"><span class="num">{{ counts.users|format_number }}</span> <span class="hero__label">{{ _n('user online', 'users online', counts.users) }}</span></p>
     <p class="muted">
-      {% if peaks.users.count %}{{ 'Peak %s on %s'|t|format(peaks.users.count|format_number, peaks.users.time|datetime('j M Y, H:i')) }}{% endif %}
+      {% if peaks.users.count %}{{ 'Peak %s on %s'|t|format(peaks.users.count|format_number, peaks.users.time|datetime('d MMM yyyy, HH:mm')) }}{% endif %}
     </p>
   </div>
   <div class="hero__chart">

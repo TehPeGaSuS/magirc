@@ -31,7 +31,6 @@ final class Translator
 
     public static function load(string $localeDir, string $locale): self
     {
-        $t = new GettextTranslator();
         $base = "$localeDir/$locale/LC_MESSAGES/magirc";
         $translations = null;
         if (is_file("$base.mo")) {
@@ -39,9 +38,9 @@ final class Translator
         } elseif (is_file("$base.po")) {
             $translations = (new PoLoader())->loadFile("$base.po");
         }
-        if ($translations instanceof Translations) {
-            $t->loadTranslations($translations);
-        }
+        $t = $translations instanceof Translations
+            ? GettextTranslator::createFromTranslations($translations)
+            : new GettextTranslator();
         return new self($t, $locale);
     }
 

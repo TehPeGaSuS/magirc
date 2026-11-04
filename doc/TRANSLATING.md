@@ -11,10 +11,7 @@ To create or refresh a translation:
 
 1. Extract the template:
 
-       xgettext --language=Python --keyword=t --keyword=__ --keyword=_n:1,2 \
-           --from-code=UTF-8 -o locale/magirc.pot templates/default/*.twig
-       xgettext --language=PHP --keyword=t --keyword=plural:1,2 -j \
-           --from-code=UTF-8 -o locale/magirc.pot src/Web/*.php
+       python3 tools/extract-strings.py        # writes locale/magirc.pot
 
 2. Start or update your language:
 
@@ -25,5 +22,10 @@ To create or refresh a translation:
    and compile it:
 
        msgfmt -o locale/pt_PT/LC_MESSAGES/magirc.mo locale/pt_PT/LC_MESSAGES/magirc.po
+
+Commit both the `.po` and the compiled `.mo`; MagIRC prefers the `.mo` and
+falls back to parsing the `.po` when only that exists.
+
+Shipped translations: `pt_PT` (Portuguese, Portugal).
 
 The 1.x translations do not carry over; the strings changed too much.

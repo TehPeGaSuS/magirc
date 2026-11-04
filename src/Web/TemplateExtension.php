@@ -134,14 +134,18 @@ final class TemplateExtension extends AbstractExtension
         return sprintf($this->translator->plural($unit[0], $unit[1], $n), $n);
     }
 
-    /** Absolute date/time in the configured timezone. */
-    public function datetime(int|null $time, string $format = 'Y-m-d H:i'): string
+    /**
+     * Absolute date/time in the configured timezone and locale. $pattern is an
+     * ICU pattern (e.g. 'd MMM yyyy, HH:mm'), so month names are translated.
+     */
+    public function datetime(int|null $time, string $pattern = 'yyyy-MM-dd HH:mm'): string
     {
         if (!$time) {
             return '';
         }
-        $tz = new \DateTimeZone($this->services->config->string('display.timezone', 'UTC'));
-        return (new \DateTimeImmutable('@' . $time))->setTimezone($tz)->format($format);
+        $tz = $this->services->config->string('display.timezone', 'UTC');
+        $formatter = new \IntlDateFormatter($this->translator->locale(), \IntlDateFormatter::NONE, \IntlDateFormatter::NONE, $tz, null, $pattern);
+        return (string) $formatter->format($time);
     }
 
     /** Regional-indicator emoji for an ISO country code; empty when unknown. */

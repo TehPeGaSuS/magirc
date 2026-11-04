@@ -1,0 +1,498 @@
+# Portuguese (Portugal) translation of MagIRC.
+msgid ""
+msgstr ""
+"Project-Id-Version: MagIRC 2.0\n"
+"Language: pt_PT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Channel"
+msgstr "Canal"
+
+msgid "Account"
+msgstr "Conta"
+
+msgid "Lines"
+msgstr "Linhas"
+
+msgid "Words"
+msgstr "Palavras"
+
+msgid "Letters"
+msgstr "Letras"
+
+msgid "Actions"
+msgstr "Ações"
+
+msgid "happy / sad / other"
+msgstr "felizes / tristes / outros"
+
+msgid "Smileys"
+msgstr "Smileys"
+
+msgid "Kicks"
+msgstr "Kicks"
+
+msgid "Modes"
+msgstr "Modos"
+
+msgid "Topics"
+msgstr "Tópicos"
+
+msgid "Share of users per country"
+msgstr "Percentagem de utilizadores por país"
+
+msgid "Country"
+msgstr "País"
+
+msgid "Users"
+msgstr "Utilizadores"
+
+msgid "Unknown"
+msgstr "Desconhecido"
+
+msgid "Today"
+msgstr "Hoje"
+
+msgid "This week"
+msgstr "Esta semana"
+
+msgid "This month"
+msgstr "Este mês"
+
+msgid "All time"
+msgstr "Desde sempre"
+
+msgid "Period"
+msgstr "Período"
+
+msgid "Only all-time figures are available."
+msgstr "Só estão disponíveis os totais desde sempre."
+
+msgid "Nick"
+msgstr "Nick"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Real name"
+msgstr "Nome real"
+
+msgid "Server"
+msgstr "Servidor"
+
+msgid "Channels"
+msgstr "Canais"
+
+msgid "Online for"
+msgstr "Ligado há"
+
+msgid "oper"
+msgstr "oper"
+
+msgid "away"
+msgstr "ausente"
+
+msgid "Connected with TLS"
+msgstr "Ligado com TLS"
+
+msgid "Activity"
+msgstr "Atividade"
+
+msgid "Who talks the most, in which channels. Counted by services for channels and users that opted in."
+msgstr "Quem mais fala e em que canais. Contado pelos serviços para os canais e utilizadores que o ativaram."
+
+msgid "No channel has statistics yet. Channel founders enable them with %s."
+msgstr "Nenhum canal tem ainda estatísticas. Os fundadores dos canais ativam-nas com %s."
+
+msgid "No user has statistics yet. Users enable them with %s."
+msgstr "Nenhum utilizador tem ainda estatísticas. Os utilizadores ativam-nas com %s."
+
+msgid "activity"
+msgstr "atividade"
+
+msgid "Channel page"
+msgstr "Página do canal"
+
+msgid "By hour of day"
+msgstr "Por hora do dia"
+
+msgid "Lines per hour of the day"
+msgstr "Linhas por hora do dia"
+
+msgid "Hours follow the clock of the services database server."
+msgstr "As horas seguem o relógio do servidor da base de dados dos serviços."
+
+msgid "No per-user statistics for this period."
+msgstr "Sem estatísticas por utilizador neste período."
+
+msgid "%s user in the channel right now."
+msgid_plural "%s users in the channel right now."
+msgstr[0] "%s utilizador no canal neste momento."
+msgstr[1] "%s utilizadores no canal neste momento."
+
+msgid "Online now as %s."
+msgstr "Ligado agora como %s."
+
+msgid "User page"
+msgstr "Página do utilizador"
+
+msgid "Kicks given"
+msgstr "Kicks dados"
+
+msgid "Kicked"
+msgstr "Kicks recebidos"
+
+msgid "No channel statistics for this period."
+msgstr "Sem estatísticas de canais neste período."
+
+msgid "Topic set by %s, %s"
+msgstr "Tópico definido por %s, %s"
+
+msgid "No topic set."
+msgstr "Sem tópico."
+
+msgid "Created"
+msgstr "Criado"
+
+msgid "Registered"
+msgstr "Registado"
+
+msgid "yes"
+msgstr "sim"
+
+msgid "no"
+msgstr "não"
+
+msgid "Join"
+msgstr "Entrar"
+
+msgid "Open in webchat"
+msgstr "Abrir no webchat"
+
+msgid "Activity statistics"
+msgstr "Estatísticas de atividade"
+
+msgid "Countries"
+msgstr "Países"
+
+msgid "Status"
+msgstr "Estado"
+
+msgid "%s of the %s users in this channel is logged in to an account; only they are listed."
+msgid_plural "%s of the %s users in this channel are logged in to an account; only they are listed."
+msgstr[0] "%s dos %s utilizadores neste canal está autenticado numa conta; só esse é listado."
+msgstr[1] "%s dos %s utilizadores neste canal estão autenticados numa conta; só esses são listados."
+
+msgid "Only channels registered with ChanServ are listed; the totals on this site count every public channel."
+msgstr "Só são listados os canais registados no ChanServ; os totais deste site contam todos os canais públicos."
+
+msgid "Filter channels"
+msgstr "Filtrar canais"
+
+msgid "Filter by name or topic"
+msgstr "Filtrar por nome ou tópico"
+
+msgid "Topic"
+msgstr "Tópico"
+
+msgid "Registered with ChanServ"
+msgstr "Registado no ChanServ"
+
+msgid "registered"
+msgstr "registado"
+
+msgid "%s registered channel, %s public channels in total."
+msgid_plural "%s registered channels, %s public channels in total."
+msgstr[0] "%s canal registado, %s canais públicos no total."
+msgstr[1] "%s canais registados, %s canais públicos no total."
+
+msgid "%s public channel right now."
+msgid_plural "%s public channels right now."
+msgstr[0] "%s canal público neste momento."
+msgstr[1] "%s canais públicos neste momento."
+
+msgid "%s channel is not shown: secret, private or kept off this site."
+msgid_plural "%s channels are not shown: secret, private or kept off this site."
+msgstr[0] "%s canal não é mostrado: secreto, privado ou excluído deste site."
+msgstr[1] "%s canais não são mostrados: secretos, privados ou excluídos deste site."
+
+msgid "Where the %s users online now connect from."
+msgstr "De onde se ligam os %s utilizadores online neste momento."
+
+msgid "Unknown country"
+msgstr "País desconhecido"
+
+msgid "All countries"
+msgstr "Todos os países"
+
+msgid "Only users logged in to a NickServ account are listed."
+msgstr "Só são listados os utilizadores autenticados numa conta do NickServ."
+
+msgid "%s user online from %s."
+msgid_plural "%s users online from %s."
+msgstr[0] "%s utilizador online de %s."
+msgstr[1] "%s utilizadores online de %s."
+
+msgid "%s user online whose address the country database cannot place."
+msgid_plural "%s users online whose addresses the country database cannot place."
+msgstr[0] "%s utilizador online cujo endereço a base de dados de países não consegue localizar."
+msgstr[1] "%s utilizadores online cujos endereços a base de dados de países não consegue localizar."
+
+msgid "Back to the network overview"
+msgstr "Voltar à vista geral da rede"
+
+msgid "Live statistics of the %s IRC network: users, channels, servers and activity."
+msgstr "Estatísticas em tempo real da rede de IRC %s: utilizadores, canais, servidores e atividade."
+
+msgid "Pages"
+msgstr "Páginas"
+
+msgid "Previous"
+msgstr "Anterior"
+
+msgid "Next"
+msgstr "Seguinte"
+
+msgid "Skip to content"
+msgstr "Saltar para o conteúdo"
+
+msgid "Main"
+msgstr "Principal"
+
+msgid "Menu"
+msgstr "Menu"
+
+msgid "Network"
+msgstr "Rede"
+
+msgid "Servers"
+msgstr "Servidores"
+
+msgid "Operators"
+msgstr "Operadores"
+
+msgid "Switch between light and dark theme"
+msgstr "Alternar entre o tema claro e o escuro"
+
+msgid "Light / dark"
+msgstr "Claro / escuro"
+
+msgid "Connect:"
+msgstr "Ligar:"
+
+msgid "Webchat"
+msgstr "Webchat"
+
+msgid "Data from %s"
+msgstr "Dados de %s"
+
+msgid "Peak %s on %s"
+msgstr "Máximo de %s em %s"
+
+msgid "Users online, last 24 hours"
+msgstr "Utilizadores online, últimas 24 horas"
+
+msgid "Users online over the last 24 hours"
+msgstr "Utilizadores online nas últimas 24 horas"
+
+msgid "No history yet. Run %s from cron every few minutes to start recording it."
+msgstr "Ainda sem histórico. Execute %s no cron de poucos em poucos minutos para começar a registá-lo."
+
+msgid "peak %s"
+msgstr "máximo %s"
+
+msgid "Linked servers"
+msgstr "Servidores ligados"
+
+msgid "IRC operators"
+msgstr "Operadores de IRC"
+
+msgid "Busiest channels"
+msgstr "Canais mais movimentados"
+
+msgid "All channels"
+msgstr "Todos os canais"
+
+msgid "No public channels right now."
+msgstr "Sem canais públicos neste momento."
+
+msgid "All servers"
+msgstr "Todos os servidores"
+
+msgid "The last 30 days"
+msgstr "Os últimos 30 dias"
+
+msgid "Users and channels, last 30 days"
+msgstr "Utilizadores e canais, últimos 30 dias"
+
+msgid "Users and channels over the last 30 days"
+msgstr "Utilizadores e canais nos últimos 30 dias"
+
+msgid "user online"
+msgid_plural "users online"
+msgstr[0] "utilizador online"
+msgstr[1] "utilizadores online"
+
+msgid "Services operators"
+msgstr "Operadores dos serviços"
+
+msgid "Accounts with services access, whether online or not."
+msgstr "Contas com acesso aos serviços, estejam online ou não."
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "online"
+msgstr "online"
+
+msgid "offline"
+msgstr "offline"
+
+msgid "%s IRC operator online."
+msgid_plural "%s IRC operators online."
+msgstr[0] "%s operador de IRC online."
+msgstr[1] "%s operadores de IRC online."
+
+msgid "linked"
+msgstr "ligado"
+
+msgid "Linked since"
+msgstr "Ligado desde"
+
+msgid "Uplink"
+msgstr "Uplink"
+
+msgid "This server is not linked right now."
+msgstr "Este servidor não está ligado neste momento."
+
+msgid "Last seen %s."
+msgstr "Visto pela última vez %s."
+
+msgid "Users this week"
+msgstr "Utilizadores esta semana"
+
+msgid "Users on this server over the last 7 days"
+msgstr "Utilizadores neste servidor nos últimos 7 dias"
+
+msgid "last seen %s"
+msgstr "visto pela última vez %s"
+
+msgid "%s server is not shown on this site."
+msgid_plural "%s servers are not shown on this site."
+msgstr[0] "%s servidor não é mostrado neste site."
+msgstr[1] "%s servidores não são mostrados neste site."
+
+msgid "IRC operator"
+msgstr "Operador de IRC"
+
+msgid "Away since %s"
+msgstr "Ausente desde %s"
+
+msgid "Online since"
+msgstr "Ligado desde"
+
+msgid "not logged in"
+msgstr "não autenticado"
+
+msgid "Connection"
+msgstr "Ligação"
+
+msgid "TLS"
+msgstr "TLS"
+
+msgid "plain text"
+msgstr "sem cifra"
+
+msgid "Not in any public channel."
+msgstr "Em nenhum canal público."
+
+msgid "In %s channels; only the %s registered one is listed."
+msgid_plural "In %s channels; only the %s registered ones are listed."
+msgstr[0] "Em %s canais; só é listado o %s registado."
+msgstr[1] "Em %s canais; só são listados os %s registados."
+
+msgid "Only users logged in to a NickServ account are listed; the totals on this site count everyone."
+msgstr "Só são listados os utilizadores autenticados numa conta do NickServ; os totais deste site contam toda a gente."
+
+msgid "Filter users"
+msgstr "Filtrar utilizadores"
+
+msgid "Filter by nick, host or name"
+msgstr "Filtrar por nick, host ou nome"
+
+msgid "%s registered user online, %s users in total."
+msgid_plural "%s registered users online, %s users in total."
+msgstr[0] "%s utilizador registado online, %s utilizadores no total."
+msgstr[1] "%s utilizadores registados online, %s utilizadores no total."
+
+msgid "%s user online."
+msgid_plural "%s users online."
+msgstr[0] "%s utilizador online."
+msgstr[1] "%s utilizadores online."
+
+msgid "%s server is not shown on this site; its users appear without a link to it."
+msgid_plural "%s servers are not shown on this site; their users appear without a link to them."
+msgstr[0] "%s servidor não é mostrado neste site; os seus utilizadores aparecem sem ligação para ele."
+msgstr[1] "%s servidores não são mostrados neste site; os seus utilizadores aparecem sem ligação para eles."
+
+msgid "never"
+msgstr "nunca"
+
+msgid "just now"
+msgstr "agora mesmo"
+
+msgid "%d minute ago"
+msgid_plural "%d minutes ago"
+msgstr[0] "há %d minuto"
+msgstr[1] "há %d minutos"
+
+msgid "%d hour ago"
+msgid_plural "%d hours ago"
+msgstr[0] "há %d hora"
+msgstr[1] "há %d horas"
+
+msgid "%d day ago"
+msgid_plural "%d days ago"
+msgstr[0] "há %d dia"
+msgstr[1] "há %d dias"
+
+msgid "%d month ago"
+msgid_plural "%d months ago"
+msgstr[0] "há %d mês"
+msgstr[1] "há %d meses"
+
+msgid "owner"
+msgstr "dono"
+
+msgid "admin"
+msgstr "admin"
+
+msgid "op"
+msgstr "op"
+
+msgid "halfop"
+msgstr "halfop"
+
+msgid "voice"
+msgstr "voice"
+
+msgid "Not found"
+msgstr "Não encontrado"
+
+msgid "There is nothing at this address."
+msgstr "Não há nada neste endereço."
+
+msgid "Services unavailable"
+msgstr "Serviços indisponíveis"
+
+msgid "MagIRC could not get data from the IRC services. Try again in a moment."
+msgstr "O MagIRC não conseguiu obter dados dos serviços de IRC. Tente novamente daqui a instantes."
+
+msgid "Something went wrong"
+msgstr "Algo correu mal"
+
+msgid "The page could not be built."
+msgstr "Não foi possível construir a página."

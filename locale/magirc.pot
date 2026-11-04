@@ -1,0 +1,650 @@
+# MagIRC translation template.
+msgid ""
+msgstr ""
+"Project-Id-Version: MagIRC\n"
+"POT-Creation-Date: 2026-11-04 00:51+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/default/_activity_table.twig templates/default/channels.twig templates/default/network.twig templates/default/user.twig
+msgid "Channel"
+msgstr ""
+
+#: templates/default/_activity_table.twig templates/default/operators.twig templates/default/user.twig
+msgid "Account"
+msgstr ""
+
+#: templates/default/_activity_table.twig templates/default/activity_channel.twig templates/default/activity_user.twig
+msgid "Lines"
+msgstr ""
+
+#: templates/default/_activity_table.twig templates/default/activity_channel.twig templates/default/activity_user.twig
+msgid "Words"
+msgstr ""
+
+#: templates/default/_activity_table.twig
+msgid "Letters"
+msgstr ""
+
+#: templates/default/_activity_table.twig templates/default/activity_channel.twig templates/default/activity_user.twig
+msgid "Actions"
+msgstr ""
+
+#: templates/default/_activity_table.twig
+msgid "happy / sad / other"
+msgstr ""
+
+#: templates/default/_activity_table.twig templates/default/activity_channel.twig templates/default/activity_user.twig
+msgid "Smileys"
+msgstr ""
+
+#: templates/default/_activity_table.twig templates/default/activity_channel.twig
+msgid "Kicks"
+msgstr ""
+
+#: templates/default/_activity_table.twig templates/default/channel.twig templates/default/channels.twig templates/default/user.twig
+msgid "Modes"
+msgstr ""
+
+#: templates/default/_activity_table.twig templates/default/activity_channel.twig
+msgid "Topics"
+msgstr ""
+
+#: templates/default/_countries.twig
+msgid "Share of users per country"
+msgstr ""
+
+#: templates/default/_countries.twig templates/default/operators.twig templates/default/user.twig templates/default/users.twig
+msgid "Country"
+msgstr ""
+
+#: templates/default/_countries.twig templates/default/activity.twig templates/default/activity_channel.twig templates/default/channel.twig templates/default/channels.twig templates/default/layout.twig templates/default/network.twig templates/default/server.twig templates/default/servers.twig templates/default/user.twig templates/default/users.twig
+msgid "Users"
+msgstr ""
+
+#: templates/default/_countries.twig templates/default/user.twig
+msgid "Unknown"
+msgstr ""
+
+#: templates/default/_period.twig
+msgid "Today"
+msgstr ""
+
+#: templates/default/_period.twig
+msgid "This week"
+msgstr ""
+
+#: templates/default/_period.twig
+msgid "This month"
+msgstr ""
+
+#: templates/default/_period.twig
+msgid "All time"
+msgstr ""
+
+#: templates/default/_period.twig
+msgid "Period"
+msgstr ""
+
+#: templates/default/_period.twig
+msgid "Only all-time figures are available."
+msgstr ""
+
+#: templates/default/_users_table.twig templates/default/channel.twig templates/default/operators.twig templates/default/users.twig
+msgid "Nick"
+msgstr ""
+
+#: templates/default/_users_table.twig templates/default/channel.twig templates/default/operators.twig templates/default/user.twig templates/default/users.twig
+msgid "Host"
+msgstr ""
+
+#: templates/default/_users_table.twig templates/default/channel.twig templates/default/operators.twig templates/default/users.twig
+msgid "Real name"
+msgstr ""
+
+#: templates/default/_users_table.twig templates/default/channel.twig templates/default/network.twig templates/default/operators.twig templates/default/servers.twig templates/default/user.twig templates/default/users.twig
+msgid "Server"
+msgstr ""
+
+#: templates/default/_users_table.twig templates/default/activity.twig templates/default/activity_user.twig templates/default/channels.twig templates/default/layout.twig templates/default/network.twig templates/default/user.twig templates/default/users.twig
+msgid "Channels"
+msgstr ""
+
+#: templates/default/_users_table.twig templates/default/channel.twig templates/default/operators.twig templates/default/users.twig
+msgid "Online for"
+msgstr ""
+
+#: templates/default/_users_table.twig templates/default/channel.twig templates/default/users.twig
+msgid "oper"
+msgstr ""
+
+#: templates/default/_users_table.twig templates/default/channel.twig templates/default/operators.twig templates/default/users.twig
+msgid "away"
+msgstr ""
+
+#: templates/default/_users_table.twig templates/default/users.twig
+msgid "Connected with TLS"
+msgstr ""
+
+#: templates/default/activity.twig templates/default/layout.twig
+msgid "Activity"
+msgstr ""
+
+#: templates/default/activity.twig
+msgid "Who talks the most, in which channels. Counted by services for channels and users that opted in."
+msgstr ""
+
+#: templates/default/activity.twig
+msgid "No channel has statistics yet. Channel founders enable them with %s."
+msgstr ""
+
+#: templates/default/activity.twig
+msgid "No user has statistics yet. Users enable them with %s."
+msgstr ""
+
+#: templates/default/activity_channel.twig templates/default/activity_user.twig
+msgid "activity"
+msgstr ""
+
+#: templates/default/activity_channel.twig
+msgid "Channel page"
+msgstr ""
+
+#: templates/default/activity_channel.twig templates/default/activity_user.twig
+msgid "By hour of day"
+msgstr ""
+
+#: templates/default/activity_channel.twig templates/default/activity_user.twig
+msgid "Lines per hour of the day"
+msgstr ""
+
+#: templates/default/activity_channel.twig templates/default/activity_user.twig
+msgid "Hours follow the clock of the services database server."
+msgstr ""
+
+#: templates/default/activity_channel.twig
+msgid "No per-user statistics for this period."
+msgstr ""
+
+#: templates/default/activity_channel.twig
+msgid "%s user in the channel right now."
+msgid_plural "%s users in the channel right now."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/default/activity_user.twig
+msgid "Online now as %s."
+msgstr ""
+
+#: templates/default/activity_user.twig
+msgid "User page"
+msgstr ""
+
+#: templates/default/activity_user.twig
+msgid "Kicks given"
+msgstr ""
+
+#: templates/default/activity_user.twig
+msgid "Kicked"
+msgstr ""
+
+#: templates/default/activity_user.twig
+msgid "No channel statistics for this period."
+msgstr ""
+
+#: templates/default/channel.twig
+msgid "Topic set by %s, %s"
+msgstr ""
+
+#: templates/default/channel.twig
+msgid "No topic set."
+msgstr ""
+
+#: templates/default/channel.twig
+msgid "Created"
+msgstr ""
+
+#: templates/default/channel.twig
+msgid "Registered"
+msgstr ""
+
+#: templates/default/channel.twig
+msgid "yes"
+msgstr ""
+
+#: templates/default/channel.twig
+msgid "no"
+msgstr ""
+
+#: templates/default/channel.twig
+msgid "Join"
+msgstr ""
+
+#: templates/default/channel.twig
+msgid "Open in webchat"
+msgstr ""
+
+#: templates/default/channel.twig templates/default/user.twig
+msgid "Activity statistics"
+msgstr ""
+
+#: templates/default/channel.twig templates/default/countries.twig templates/default/layout.twig templates/default/server.twig
+msgid "Countries"
+msgstr ""
+
+#: templates/default/channel.twig templates/default/operators.twig templates/default/server.twig templates/default/servers.twig templates/default/user.twig
+msgid "Status"
+msgstr ""
+
+#: templates/default/channel.twig
+msgid "%s of the %s users in this channel is logged in to an account; only they are listed."
+msgid_plural "%s of the %s users in this channel are logged in to an account; only they are listed."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/default/channels.twig
+msgid "Only channels registered with ChanServ are listed; the totals on this site count every public channel."
+msgstr ""
+
+#: templates/default/channels.twig
+msgid "Filter channels"
+msgstr ""
+
+#: templates/default/channels.twig
+msgid "Filter by name or topic"
+msgstr ""
+
+#: templates/default/channels.twig templates/default/network.twig templates/default/user.twig
+msgid "Topic"
+msgstr ""
+
+#: templates/default/channels.twig
+msgid "Registered with ChanServ"
+msgstr ""
+
+#: templates/default/channels.twig
+msgid "registered"
+msgstr ""
+
+#: templates/default/channels.twig
+msgid "%s registered channel, %s public channels in total."
+msgid_plural "%s registered channels, %s public channels in total."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/default/channels.twig
+msgid "%s public channel right now."
+msgid_plural "%s public channels right now."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/default/channels.twig
+msgid "%s channel is not shown: secret, private or kept off this site."
+msgid_plural "%s channels are not shown: secret, private or kept off this site."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/default/countries.twig
+msgid "Where the %s users online now connect from."
+msgstr ""
+
+#: templates/default/country.twig
+msgid "Unknown country"
+msgstr ""
+
+#: templates/default/country.twig
+msgid "All countries"
+msgstr ""
+
+#: templates/default/country.twig
+msgid "Only users logged in to a NickServ account are listed."
+msgstr ""
+
+#: templates/default/country.twig
+msgid "%s user online from %s."
+msgid_plural "%s users online from %s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/default/country.twig
+msgid "%s user online whose address the country database cannot place."
+msgid_plural "%s users online whose addresses the country database cannot place."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/default/error.twig
+msgid "Back to the network overview"
+msgstr ""
+
+#: templates/default/layout.twig
+msgid "Live statistics of the %s IRC network: users, channels, servers and activity."
+msgstr ""
+
+#: templates/default/layout.twig
+msgid "Pages"
+msgstr ""
+
+#: templates/default/layout.twig
+msgid "Previous"
+msgstr ""
+
+#: templates/default/layout.twig
+msgid "Next"
+msgstr ""
+
+#: templates/default/layout.twig
+msgid "Skip to content"
+msgstr ""
+
+#: templates/default/layout.twig
+msgid "Main"
+msgstr ""
+
+#: templates/default/layout.twig
+msgid "Menu"
+msgstr ""
+
+#: templates/default/layout.twig
+msgid "Network"
+msgstr ""
+
+#: templates/default/layout.twig templates/default/network.twig templates/default/servers.twig
+msgid "Servers"
+msgstr ""
+
+#: templates/default/layout.twig templates/default/operators.twig templates/default/server.twig templates/default/servers.twig
+msgid "Operators"
+msgstr ""
+
+#: templates/default/layout.twig
+msgid "Switch between light and dark theme"
+msgstr ""
+
+#: templates/default/layout.twig
+msgid "Light / dark"
+msgstr ""
+
+#: templates/default/layout.twig
+msgid "Connect:"
+msgstr ""
+
+#: templates/default/layout.twig
+msgid "Webchat"
+msgstr ""
+
+#: templates/default/layout.twig
+msgid "Data from %s"
+msgstr ""
+
+#: templates/default/network.twig
+msgid "Peak %s on %s"
+msgstr ""
+
+#: templates/default/network.twig
+msgid "Users online, last 24 hours"
+msgstr ""
+
+#: templates/default/network.twig
+msgid "Users online over the last 24 hours"
+msgstr ""
+
+#: templates/default/network.twig
+msgid "No history yet. Run %s from cron every few minutes to start recording it."
+msgstr ""
+
+#: templates/default/network.twig
+msgid "peak %s"
+msgstr ""
+
+#: templates/default/network.twig
+msgid "Linked servers"
+msgstr ""
+
+#: templates/default/network.twig
+msgid "IRC operators"
+msgstr ""
+
+#: templates/default/network.twig
+msgid "Busiest channels"
+msgstr ""
+
+#: templates/default/network.twig
+msgid "All channels"
+msgstr ""
+
+#: templates/default/network.twig
+msgid "No public channels right now."
+msgstr ""
+
+#: templates/default/network.twig
+msgid "All servers"
+msgstr ""
+
+#: templates/default/network.twig
+msgid "The last 30 days"
+msgstr ""
+
+#: templates/default/network.twig
+msgid "Users and channels, last 30 days"
+msgstr ""
+
+#: templates/default/network.twig
+msgid "Users and channels over the last 30 days"
+msgstr ""
+
+#: templates/default/network.twig
+msgid "user online"
+msgid_plural "users online"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/default/operators.twig
+msgid "Services operators"
+msgstr ""
+
+#: templates/default/operators.twig
+msgid "Accounts with services access, whether online or not."
+msgstr ""
+
+#: templates/default/operators.twig
+msgid "Type"
+msgstr ""
+
+#: templates/default/operators.twig
+msgid "online"
+msgstr ""
+
+#: templates/default/operators.twig templates/default/server.twig templates/default/servers.twig
+msgid "offline"
+msgstr ""
+
+#: templates/default/operators.twig
+msgid "%s IRC operator online."
+msgid_plural "%s IRC operators online."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/default/server.twig templates/default/servers.twig
+msgid "linked"
+msgstr ""
+
+#: templates/default/server.twig templates/default/servers.twig
+msgid "Linked since"
+msgstr ""
+
+#: templates/default/server.twig
+msgid "Uplink"
+msgstr ""
+
+#: templates/default/server.twig
+msgid "This server is not linked right now."
+msgstr ""
+
+#: templates/default/server.twig
+msgid "Last seen %s."
+msgstr ""
+
+#: templates/default/server.twig
+msgid "Users this week"
+msgstr ""
+
+#: templates/default/server.twig
+msgid "Users on this server over the last 7 days"
+msgstr ""
+
+#: templates/default/servers.twig
+msgid "last seen %s"
+msgstr ""
+
+#: templates/default/servers.twig
+msgid "%s server is not shown on this site."
+msgid_plural "%s servers are not shown on this site."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/default/user.twig
+msgid "IRC operator"
+msgstr ""
+
+#: templates/default/user.twig
+msgid "Away since %s"
+msgstr ""
+
+#: templates/default/user.twig
+msgid "Online since"
+msgstr ""
+
+#: templates/default/user.twig
+msgid "not logged in"
+msgstr ""
+
+#: templates/default/user.twig
+msgid "Connection"
+msgstr ""
+
+#: templates/default/user.twig
+msgid "TLS"
+msgstr ""
+
+#: templates/default/user.twig
+msgid "plain text"
+msgstr ""
+
+#: templates/default/user.twig
+msgid "Not in any public channel."
+msgstr ""
+
+#: templates/default/user.twig
+msgid "In %s channels; only the %s registered one is listed."
+msgid_plural "In %s channels; only the %s registered ones are listed."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/default/users.twig
+msgid "Only users logged in to a NickServ account are listed; the totals on this site count everyone."
+msgstr ""
+
+#: templates/default/users.twig
+msgid "Filter users"
+msgstr ""
+
+#: templates/default/users.twig
+msgid "Filter by nick, host or name"
+msgstr ""
+
+#: templates/default/users.twig
+msgid "%s registered user online, %s users in total."
+msgid_plural "%s registered users online, %s users in total."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/default/users.twig
+msgid "%s user online."
+msgid_plural "%s users online."
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/default/users.twig
+msgid "%s server is not shown on this site; its users appear without a link to it."
+msgid_plural "%s servers are not shown on this site; their users appear without a link to them."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Web/ErrorHandler.php
+msgid "Not found"
+msgstr ""
+
+#: src/Web/ErrorHandler.php
+msgid "There is nothing at this address."
+msgstr ""
+
+#: src/Web/ErrorHandler.php
+msgid "Services unavailable"
+msgstr ""
+
+#: src/Web/ErrorHandler.php
+msgid "MagIRC could not get data from the IRC services. Try again in a moment."
+msgstr ""
+
+#: src/Web/ErrorHandler.php
+msgid "Something went wrong"
+msgstr ""
+
+#: src/Web/ErrorHandler.php
+msgid "The page could not be built."
+msgstr ""
+
+#: src/Web/TemplateExtension.php
+msgid "never"
+msgstr ""
+
+#: src/Web/TemplateExtension.php
+msgid "just now"
+msgstr ""
+
+#: src/Web/TemplateExtension.php
+msgid "%d minute ago"
+msgid_plural "%d minutes ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Web/TemplateExtension.php
+msgid "%d hour ago"
+msgid_plural "%d hours ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Web/TemplateExtension.php
+msgid "%d day ago"
+msgid_plural "%d days ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Web/TemplateExtension.php
+msgid "%d month ago"
+msgid_plural "%d months ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Web/TemplateExtension.php
+msgid "owner"
+msgstr ""
+
+#: src/Web/TemplateExtension.php
+msgid "admin"
+msgstr ""
+
+#: src/Web/TemplateExtension.php
+msgid "op"
+msgstr ""
+
+#: src/Web/TemplateExtension.php
+msgid "halfop"
+msgstr ""
+
+#: src/Web/TemplateExtension.php
+msgid "voice"
+msgstr ""
+
