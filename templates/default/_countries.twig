@@ -6,7 +6,7 @@
     <tbody>
     {% for c in countries %}
       <tr>
-        <td data-sort-value="{{ c.name }}">{{ flag(c.code) }} <a href="{{ url_for('network.country', {code: c.code ?: 'unknown'}) }}">{{ c.code ? c.name : 'Unknown'|t }}</a></td>
+        <td class="nowrap" data-sort-value="{{ c.name }}">{{ flag(c.code) }} <a href="{{ url_for('network.country', {code: c.code ?: 'unknown'}) }}">{{ c.code ? c.name : 'Unknown'|t }}</a></td>
         <td class="num" data-sort-value="{{ c.count }}">{{ c.count }}</td>
         <td class="num" data-sort-value="{{ c.percent }}">{{ c.percent }}</td>
       </tr>
