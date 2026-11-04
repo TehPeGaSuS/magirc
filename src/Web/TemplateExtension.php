@@ -158,7 +158,8 @@ final class TemplateExtension extends AbstractExtension
             $diff < 3600 => [intdiv($diff, 60), ['%d minute ago', '%d minutes ago']],
             $diff < 86400 => [intdiv($diff, 3600), ['%d hour ago', '%d hours ago']],
             $diff < 86400 * 30 => [intdiv($diff, 86400), ['%d day ago', '%d days ago']],
-            default => [intdiv($diff, 86400 * 30), ['%d month ago', '%d months ago']],
+            $diff < 86400 * 365 => [min(11, intdiv($diff, 86400 * 30)), ['%d month ago', '%d months ago']],
+            default => [intdiv($diff, 31556952), ['%d year ago', '%d years ago']],
         };
         return sprintf($this->translator->plural($unit[0], $unit[1], $n), $n);
     }

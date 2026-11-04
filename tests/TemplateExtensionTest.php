@@ -50,6 +50,16 @@ final class TemplateExtensionTest extends TestCase
         self::assertStringStartsWith('2019-10-10 10:09 ', $e->datetime(1570698581));
     }
 
+    public function testAgoUsesYears(): void
+    {
+        $e = $this->ext('');
+        self::assertSame('3 days ago', $e->ago(time() - 3 * 86400 - 10));
+        self::assertSame('2 months ago', $e->ago(time() - 65 * 86400));
+        self::assertSame('11 months ago', $e->ago(time() - 362 * 86400), 'no "12 months ago" just before a year');
+        self::assertSame('1 year ago', $e->ago(time() - 400 * 86400));
+        self::assertSame('10 years ago', $e->ago(time() - 3895 * 86400), 'rather than "129 months ago"');
+    }
+
     public function testIrcStrip(): void
     {
         self::assertSame('hello world', TemplateExtension::ircStrip("\x0304,01hello\x03 \x02world\x02\x0f"));

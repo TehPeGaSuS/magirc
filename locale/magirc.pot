@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MagIRC\n"
-"POT-Creation-Date: 2026-11-04 23:06+0000\n"
+"POT-Creation-Date: 2026-11-04 23:55+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -627,6 +627,12 @@ msgstr[1] ""
 #: src/Web/TemplateExtension.php
 msgid "%d month ago"
 msgid_plural "%d months ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Web/TemplateExtension.php
+msgid "%d year ago"
+msgid_plural "%d years ago"
 msgstr[0] ""
 msgstr[1] ""
 
