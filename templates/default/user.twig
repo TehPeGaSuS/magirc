@@ -21,7 +21,7 @@
 
 <section>
   <h2>{{ 'Channels'|t }}</h2>
-  {% if cfg.display.registered_channels_only and channels|length < user.channels|length %}<p class="muted small">{{ _n('In %s channels; only the %s registered one is listed.', 'In %s channels; only the %s registered ones are listed.', channels|length)|format(user.channels|length, channels|length) }}</p>{% endif %}
+  {% if cfg.display.registered_channels_only and channels|length < user.channels|length %}<p class="note">{{ _n('In %s channels; only the %s registered one is listed.', 'In %s channels; only the %s registered ones are listed.', channels|length)|format(user.channels|length, channels|length) }}</p>{% endif %}
   {% if channels %}
   <table class="table table--sortable">
     <thead><tr><th>{{ 'Channel'|t }}</th><th>{{ 'Status'|t }}</th><th class="num" data-sort="desc">{{ 'Users'|t }}</th><th>{{ 'Topic'|t }}</th></tr></thead>

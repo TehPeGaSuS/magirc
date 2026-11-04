@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>{{ 'Servers'|t }}</h1>
-{% if hidden.servers %}<p class="muted small">{{ _n('%s server is not shown on this site.', '%s servers are not shown on this site.', hidden.servers)|format(hidden.servers) }}</p>{% endif %}
+{% if hidden.servers %}<p class="note">{{ _n('%s server is not shown on this site.', '%s servers are not shown on this site.', hidden.servers)|format(hidden.servers) }}</p>{% endif %}
 <table class="table table--sortable">
   <thead><tr>
     <th>{{ 'Server'|t }}</th>

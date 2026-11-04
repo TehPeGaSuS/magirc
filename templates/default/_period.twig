@@ -6,5 +6,5 @@
   {% endfor %}
 </nav>
 {% if periods|length == 1 and period_reason is defined and period_reason %}
-  <p class="muted small">{{ 'Only all-time figures are available.'|t }}</p>
+  <p class="note">{{ 'Only all-time figures are available.'|t }}</p>
 {% endif %}

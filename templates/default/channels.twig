@@ -3,8 +3,8 @@
 {% block content %}
 <h1>{{ 'Channels'|t }}</h1>
 <p class="lead">{% if cfg.display.registered_channels_only %}{{ _n('%s registered channel, %s public channels in total.', '%s registered channels, %s public channels in total.', channels|length)|format(channels|length|format_number, total|format_number) }}{% else %}{{ _n('%s public channel right now.', '%s public channels right now.', channels|length)|format(channels|length|format_number) }}{% endif %}</p>
-{% if cfg.display.registered_channels_only %}<p class="muted small">{{ 'Only channels registered with ChanServ are listed; the totals on this site count every public channel.'|t }}</p>{% endif %}
-{% if hidden.channels %}<p class="muted small">{{ _n('%s channel is not shown: secret, private or kept off this site.', '%s channels are not shown: secret, private or kept off this site.', hidden.channels)|format(hidden.channels) }}</p>{% endif %}
+{% if cfg.display.registered_channels_only %}<p class="note">{{ 'Only channels registered with ChanServ are listed; the totals on this site count every public channel.'|t }}</p>{% endif %}
+{% if hidden.channels %}<p class="note">{{ _n('%s channel is not shown: secret, private or kept off this site.', '%s channels are not shown: secret, private or kept off this site.', hidden.channels)|format(hidden.channels) }}</p>{% endif %}
 <p><label for="filter" class="visually-hidden">{{ 'Filter channels'|t }}</label><input id="filter" class="filter" type="search" placeholder="{{ 'Filter by name or topic'|t }}" data-filter-table="#channels"></p>
 <table id="channels" class="table table--sortable table--paged">
   <thead><tr>
@@ -16,7 +16,7 @@
   <tbody>
   {% for c in channels %}
     <tr>
-      <td data-sort-value="{{ c.name|lower }}"><a href="{{ url_for('channel', {channel: c.name|trim('#', 'left')}) }}">{{ c.name }}</a>{% if c.registered %} <span class="tag tag--quiet" title="{{ 'Registered with ChanServ'|t }}">{{ 'registered'|t }}</span>{% endif %}</td>
+      <td data-sort-value="{{ c.name|lower }}"><a href="{{ url_for('channel', {channel: c.name|trim('#', 'left')}) }}">{{ c.name }}</a>{% if c.registered and not cfg.display.registered_channels_only %} <span class="tag tag--quiet" title="{{ 'Registered with ChanServ'|t }}">{{ 'registered'|t }}</span>{% endif %}</td>
       <td class="num" data-sort-value="{{ c.users }}">{{ c.users }}</td>
       <td class="topic">{{ c.topic|irc_strip }}</td>
       <td class="mono small">{{ c.modes|irc_modes }}</td>
