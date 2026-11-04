@@ -39,7 +39,10 @@ final class ResolverTest extends TestCase
         self::assertSame('', $r->lookup('garbage')['code']);
         self::assertStringStartsWith('GeoLite2-Country, built', $r->describe());
         $r->setLocale('pt_PT');
-        self::assertSame('Alemanha', $r->lookup('2a01:4f8::1')['name'], 'names follow the locale');
+        self::assertSame('Alemanha', $r->lookup('2a01:4f8::1')['name'], 'names follow the locale (ICU)');
+        self::assertSame('Estados Unidos', $r->lookup('8.8.8.8')['name']);
+        $r->setLocale('de_DE');
+        self::assertSame('Deutschland', $r->lookup('2a01:4f8::1')['name'], 'any ICU locale works, not only the eight MaxMind ships');
         $r->setLocale('en_US');
         self::assertSame('Germany', $r->lookup('2a01:4f8::1')['name']);
         $r->setLocale('pt_PT', static fn (string $en): string => $en === 'Germany' ? 'Alemanha (override)' : $en);

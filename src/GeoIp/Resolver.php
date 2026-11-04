@@ -19,8 +19,8 @@ final class Resolver
     /** @var array<string, array{code: string, name: string}> */
     private array $cache = [];
 
-    /** @var list<string> GeoLite2 name locales, most wanted first. */
-    private array $locales = ['en'];
+    /** Locale for country names (ICU/CLDR via intl), e.g. pt_PT. */
+    private string $locale = 'en';
 
     /** @var null|callable(string): string Translates an English country name; returns it unchanged when there is no translation. */
     private $translate = null;
@@ -30,27 +30,18 @@ final class Resolver
     }
 
     /**
-     * Country names in this language. A translation of the English name in
-     * the site's .po file wins (that is how pt_PT fixes the names GeoLite2
-     * only has in pt-BR); otherwise the database's own localized name is
-     * used (GeoLite2 ships de, en, es, fr, ja, pt-BR, ru, zh-CN), then English.
+     * Country names in this language. The ISO code from the database is
+     * turned into a name by ICU's CLDR data, which covers every locale
+     * (MaxMind itself only ships eight, and pt-BR rather than pt-PT). A
+     * translation of the English name in the site's .po file wins over ICU,
+     * for the odd name a translator wants spelled differently.
      */
     public function setLocale(string $locale, ?callable $translate = null): void
     {
         $this->translate = $translate;
-        $tag = str_replace('_', '-', $locale);
-        $lang = strtolower(explode('-', $tag)[0]);
-        $candidates = [$tag, $lang];
-        if ($lang === 'pt') {
-            $candidates[] = 'pt-BR';
-        } elseif ($lang === 'zh') {
-            $candidates[] = 'zh-CN';
-        }
-        $candidates[] = 'en';
-        $wanted = array_values(array_unique($candidates));
-        if ($wanted !== $this->locales) {
-            $this->locales = $wanted;
-            $this->reader = null;
+        $locale = str_replace('-', '_', $locale);
+        if ($locale !== $this->locale) {
+            $this->locale = $locale;
             $this->cache = [];
         }
     }
@@ -76,18 +67,24 @@ final class Resolver
             return $this->cache[$address] = $unknown;
         }
         try {
-            $this->reader ??= new Reader($this->databasePath, $this->locales);
+            $this->reader ??= new Reader($this->databasePath, ['en']);
             $record = $this->reader->country($address);
             $code = strtolower((string) $record->country->isoCode);
-            $english = (string) ($record->country->names['en'] ?? $record->country->name);
-            $name = (string) $record->country->name;
+            if ($code === '') {
+                return $this->cache[$address] = $unknown;
+            }
+            $english = (string) $record->country->name;
+            $name = \Locale::getDisplayRegion('und-' . strtoupper($code), $this->locale);
+            if ($name === '' || $name === strtoupper($code)) {
+                $name = $english;
+            }
             if ($this->translate !== null && $english !== '') {
                 $translated = ($this->translate)($english);
                 if ($translated !== $english) {
                     $name = $translated;
                 }
             }
-            return $this->cache[$address] = $code === '' ? $unknown : ['code' => $code, 'name' => $name];
+            return $this->cache[$address] = ['code' => $code, 'name' => $name];
         } catch (AddressNotFoundException) {
             return $this->cache[$address] = $unknown;
         } catch (\Throwable) {
@@ -102,7 +99,7 @@ final class Resolver
             return 'not configured';
         }
         try {
-            $this->reader ??= new Reader($this->databasePath, $this->locales);
+            $this->reader ??= new Reader($this->databasePath, ['en']);
             $meta = $this->reader->metadata();
             return sprintf('%s, built %s', $meta->databaseType, date('Y-m-d', $meta->buildEpoch));
         } catch (\Throwable $e) {
