@@ -165,10 +165,24 @@
     var span = range || (points.length ? (points[points.length - 1].time - points[0].time) : 0);
     var lang = root.getAttribute('lang') || undefined;
     opt.xAxis.axisLabel.hideOverlap = true;
+    // Times follow display.timezone, like the dates the server prints,
+    // not the visitor's own zone.
+    var tz = root.getAttribute('data-timezone') || 'UTC';
+    var fmt = function (value, options) {
+      options.timeZone = tz;
+      try { return new Date(value).toLocaleString(lang, options); }
+      catch (e) { delete options.timeZone; return new Date(value).toLocaleString(lang, options); }
+    };
     opt.xAxis.axisLabel.formatter = function (value) {
-      var d = new Date(value);
-      if (span > 3 * 86400) return d.toLocaleDateString(lang, { day: 'numeric', month: 'short' });
-      return d.toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit', hour12: false });
+      if (span > 3 * 86400) return fmt(value, { day: 'numeric', month: 'short' });
+      return fmt(value, { hour: '2-digit', minute: '2-digit', hour12: false });
+    };
+    opt.tooltip.formatter = function (params) {
+      if (!params.length) return '';
+      var head = fmt(params[0].value[0], { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false, timeZoneName: 'short' });
+      return params.reduce(function (html, p) {
+        return html + '<br>' + p.marker + p.seriesName + ' <strong>' + Number(p.value[1]).toLocaleString(lang) + '</strong>';
+      }, head);
     };
     opt.yAxis.type = 'value';
     opt.legend = series.length > 1 ? { bottom: 0, textStyle: { color: cssVar('--muted') }, icon: 'roundRect' } : undefined;

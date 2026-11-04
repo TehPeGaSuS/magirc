@@ -36,6 +36,20 @@ final class TemplateExtensionTest extends TestCase
         self::assertSame('', $this->ext('')->webchatUrl('#chat'));
     }
 
+    public function testDatetimeNamesTheZone(): void
+    {
+        $e = $this->ext('');
+        self::assertSame('10 Oct 2019, 09:09 UTC', $e->datetime(1570698581, 'd MMM yyyy, HH:mm'));
+        self::assertSame('2019-10-10 09:09 UTC', $e->datetime(1570698581));
+        self::assertSame('10 Oct 2019', $e->datetime(1570698581, 'd MMM yyyy'), 'no zone without a time of day');
+        self::assertSame("10 Oct 'h'", $e->datetime(1570698581, "d MMM '''h'''"), 'quoted letters are not a time');
+        self::assertSame('', $e->datetime(0));
+
+        $services = new Services(Config::fromArray(['display' => ['timezone' => 'Europe/Lisbon']]), dirname(__DIR__));
+        $e = new TemplateExtension($services, Translator::load(dirname(__DIR__) . '/locale', 'en_US'));
+        self::assertStringStartsWith('2019-10-10 10:09 ', $e->datetime(1570698581));
+    }
+
     public function testIrcStrip(): void
     {
         self::assertSame('hello world', TemplateExtension::ircStrip("\x0304,01hello\x03 \x02world\x02\x0f"));

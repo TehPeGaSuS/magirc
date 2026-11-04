@@ -165,6 +165,8 @@ final class TemplateExtension extends AbstractExtension
     /**
      * Absolute date/time in the configured timezone and locale. $pattern is an
      * ICU pattern (e.g. 'd MMM yyyy, HH:mm'), so month names are translated.
+     * A pattern with a time of day gets the zone appended ("09:09 UTC"), so
+     * visitors elsewhere do not read it as their local time.
      */
     public function datetime(int|null $time, string $pattern = 'yyyy-MM-dd HH:mm'): string
     {
@@ -172,8 +174,17 @@ final class TemplateExtension extends AbstractExtension
             return '';
         }
         $tz = $this->services->config->string('display.timezone', 'UTC');
+        if (preg_match("/[HhkK]/", self::patternLetters($pattern)) && !preg_match('/[zZvVOxX]/', self::patternLetters($pattern))) {
+            $pattern .= ' zzz';
+        }
         $formatter = new \IntlDateFormatter($this->translator->locale(), \IntlDateFormatter::NONE, \IntlDateFormatter::NONE, $tz, null, $pattern);
         return (string) $formatter->format($time);
+    }
+
+    /** The pattern letters of an ICU date pattern, without its quoted literals. */
+    private static function patternLetters(string $pattern): string
+    {
+        return (string) preg_replace("/'[^']*'/", '', $pattern);
     }
 
     /** Regional-indicator emoji for an ISO country code; empty when unknown. */
