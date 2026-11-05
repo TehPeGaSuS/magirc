@@ -101,6 +101,7 @@ final class TemplateExtension extends AbstractExtension
             new TwigFilter('t', fn (string $s): string => $this->translator->t($s)),
             new TwigFilter('duration', [$this, 'duration']),
             new TwigFilter('ago', [$this, 'ago']),
+            new TwigFilter('since', [$this, 'since']),
             new TwigFilter('datetime', [$this, 'datetime']),
             new TwigFilter('prefix_name', [$this, 'prefixName']),
             new TwigFilter('prefix_rank', [self::class, 'prefixRank']),
@@ -167,16 +168,63 @@ final class TemplateExtension extends AbstractExtension
 
         // Over a year: "10 years, 243 days ago", counted on the calendar in
         // the site's time zone, so it matches the date printed next to it.
-        $tz = new \DateTimeZone($this->services->config->string('display.timezone', 'UTC'));
-        $then = (new \DateTimeImmutable('@' . $time))->setTimezone($tz);
-        $now = (new \DateTimeImmutable('@' . ($time + $diff)))->setTimezone($tz);
+        [$then, $now] = $this->calendarPair($time, $time + $diff);
         $years = $then->diff($now)->y;
         $days = $then->modify('+' . $years . ' years')->diff($now)->days;
-        $span = sprintf($this->translator->plural('%d year', '%d years', $years), $years);
-        if ($days > 0) {
-            $span = sprintf($this->translator->t('%s, %s'), $span, sprintf($this->translator->plural('%d day', '%d days', $days), $days));
+        return sprintf($this->translator->t('%s ago'), $this->joinUnits([['year', $years], ['day', $days]]));
+    }
+
+    /**
+     * Calendar length from $time to $now in the two largest units:
+     * "1 month, 12 days", "5 days, 3 hours", "2 hours, 10 minutes". Months
+     * and years are calendar ones, so it agrees with the date printed beside.
+     */
+    public function since(int|null $time, int|null $now = null): string
+    {
+        $now ??= time();
+        if (!$time || $now - $time < 60) {
+            return $this->translator->t('just now');
         }
-        return sprintf($this->translator->t('%s ago'), $span);
+        [$from, $to] = $this->calendarPair($time, $now);
+        $d = $from->diff($to);
+        $units = [['year', $d->y], ['month', $d->m], ['day', $d->d], ['hour', $d->h], ['minute', $d->i]];
+        while ($units[0][1] === 0) {
+            array_shift($units);
+        }
+        return $this->joinUnits(array_slice($units, 0, 2));
+    }
+
+    /** @return array{\DateTimeImmutable, \DateTimeImmutable} */
+    private function calendarPair(int $from, int $to): array
+    {
+        $tz = new \DateTimeZone($this->services->config->string('display.timezone', 'UTC'));
+        return [(new \DateTimeImmutable('@' . $from))->setTimezone($tz), (new \DateTimeImmutable('@' . $to))->setTimezone($tz)];
+    }
+
+    /**
+     * "10 years, 3 days" from [['year', 10], ['day', 3]]; units that are 0
+     * after the first are left out.
+     *
+     * @param list<array{string, int}> $units
+     */
+    private function joinUnits(array $units): string
+    {
+        $forms = [
+            'year' => ['%d year', '%d years'],
+            'month' => ['%d month', '%d months'],
+            'day' => ['%d day', '%d days'],
+            'hour' => ['%d hour', '%d hours'],
+            'minute' => ['%d minute', '%d minutes'],
+        ];
+        $text = '';
+        foreach ($units as $i => [$unit, $n]) {
+            if ($i > 0 && $n === 0) {
+                continue;
+            }
+            $part = sprintf($this->translator->plural($forms[$unit][0], $forms[$unit][1], $n), $n);
+            $text = $text === '' ? $part : sprintf($this->translator->t('%s, %s'), $text, $part);
+        }
+        return $text;
     }
 
     /**

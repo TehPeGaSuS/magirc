@@ -47,6 +47,9 @@ for f in sorted(glob.glob(f"{ROOT}/src/**/*.php", recursive=True)):
     for m in re.finditer(r"\[" + STR + r", " + STR + r"\]\]", text):  # ago() unit pairs
         if "ago" in m.group(1):
             add(m.group(1), m.group(2), rel)
+    for m in re.finditer(r"=> \[" + STR + r", " + STR + r"\],", text):  # joinUnits() plural forms
+        if m.group(1).startswith("%d "):
+            add(m.group(1), m.group(2), rel)
     # Status names and error page titles/messages are looked up by value.
     for m in re.finditer(r"'([~&@%+])' => '([a-z]+)'", text):
         add(m.group(2), None, rel)

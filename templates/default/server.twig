@@ -6,7 +6,7 @@
   <p class="lead">{{ server.description|irc_strip }}</p>
   <dl class="props">
     <div><dt>{{ 'Status'|t }}</dt><dd>{% if online %}<span class="status status--on">{{ 'linked'|t }}</span>{% else %}<span class="status status--off">{{ 'offline'|t }}</span>{% endif %}</dd></div>
-    {% if seen and seen.linked_since %}<div><dt>{{ 'Linked since'|t }}</dt><dd>{{ seen.linked_since|datetime }} <span class="muted">({{ (snapshot_time - seen.linked_since)|duration }})</span></dd></div>{% endif %}
+    {% if seen and seen.linked_since %}<div><dt>{{ 'Linked since'|t }}</dt><dd>{{ seen.linked_since|datetime }} <span class="muted">({{ seen.linked_since|since(snapshot_time) }})</span></dd></div>{% endif %}
     {% if server.uplink %}<div><dt>{{ 'Uplink'|t }}</dt><dd>{{ server.uplink }}</dd></div>{% endif %}
     <div><dt>{{ 'Users'|t }}</dt><dd class="num">{{ server.usercount }}</dd></div>
     <div><dt>{{ 'Operators'|t }}</dt><dd class="num">{{ server.opercount }}</dd></div>

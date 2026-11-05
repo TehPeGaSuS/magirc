@@ -62,6 +62,19 @@ final class TemplateExtensionTest extends TestCase
         self::assertSame('10 years, 243 days ago', $e->ago($ago('-10 years -243 days')), 'calendar years, rather than "129 months ago"');
     }
 
+    public function testSinceUsesCalendarUnits(): void
+    {
+        $e = $this->ext('');
+        $now = (new \DateTimeImmutable('2026-11-05 12:00:00', new \DateTimeZone('UTC')))->getTimestamp();
+        $at = static fn (string $date): int => (new \DateTimeImmutable($date, new \DateTimeZone('UTC')))->getTimestamp();
+        self::assertSame('1 month, 12 days', $e->since($at('2026-09-24 08:00'), $now));
+        self::assertSame('2 months', $e->since($at('2026-09-05 11:00'), $now), 'a zero second unit is left out');
+        self::assertSame('5 days, 3 hours', $e->since($at('2026-10-31 09:00'), $now));
+        self::assertSame('2 hours, 10 minutes', $e->since($at('2026-11-05 09:50'), $now));
+        self::assertSame('1 year, 2 months', $e->since($at('2025-09-01 12:00'), $now));
+        self::assertSame('just now', $e->since($now - 30, $now));
+    }
+
     public function testIrcStrip(): void
     {
         self::assertSame('hello world', TemplateExtension::ircStrip("\x0304,01hello\x03 \x02world\x02\x0f"));
