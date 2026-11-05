@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MagIRC 2.0\n"
-"POT-Creation-Date: 2026-11-04 23:55+0000\n"
+"POT-Creation-Date: 2026-11-05 00:05+0000\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -683,6 +683,27 @@ msgstr "nunca"
 msgid "just now"
 msgstr "agora mesmo"
 
+#. Joins "10 years" and "245 days" in "10 years, 245 days ago".
+#: src/Web/TemplateExtension.php
+msgid "%s, %s"
+msgstr "%s e %s"
+
+#: src/Web/TemplateExtension.php
+msgid "%s ago"
+msgstr "há %s"
+
+#: src/Web/TemplateExtension.php
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] "%d ano"
+msgstr[1] "%d anos"
+
+#: src/Web/TemplateExtension.php
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] "%d dia"
+msgstr[1] "%d dias"
+
 #: src/Web/TemplateExtension.php
 msgid "%d minute ago"
 msgid_plural "%d minutes ago"
@@ -706,12 +727,6 @@ msgid "%d month ago"
 msgid_plural "%d months ago"
 msgstr[0] "há %d mês"
 msgstr[1] "há %d meses"
-
-#: src/Web/TemplateExtension.php
-msgid "%d year ago"
-msgid_plural "%d years ago"
-msgstr[0] "há %d ano"
-msgstr[1] "há %d anos"
 
 #: src/Web/TemplateExtension.php
 msgid "owner"

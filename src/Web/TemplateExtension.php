@@ -159,9 +159,24 @@ final class TemplateExtension extends AbstractExtension
             $diff < 86400 => [intdiv($diff, 3600), ['%d hour ago', '%d hours ago']],
             $diff < 86400 * 30 => [intdiv($diff, 86400), ['%d day ago', '%d days ago']],
             $diff < 86400 * 365 => [min(11, intdiv($diff, 86400 * 30)), ['%d month ago', '%d months ago']],
-            default => [intdiv($diff, 31556952), ['%d year ago', '%d years ago']],
+            default => [0, null],
         };
-        return sprintf($this->translator->plural($unit[0], $unit[1], $n), $n);
+        if ($unit !== null) {
+            return sprintf($this->translator->plural($unit[0], $unit[1], $n), $n);
+        }
+
+        // Over a year: "10 years, 243 days ago", counted on the calendar in
+        // the site's time zone, so it matches the date printed next to it.
+        $tz = new \DateTimeZone($this->services->config->string('display.timezone', 'UTC'));
+        $then = (new \DateTimeImmutable('@' . $time))->setTimezone($tz);
+        $now = (new \DateTimeImmutable('@' . ($time + $diff)))->setTimezone($tz);
+        $years = $then->diff($now)->y;
+        $days = $then->modify('+' . $years . ' years')->diff($now)->days;
+        $span = sprintf($this->translator->plural('%d year', '%d years', $years), $years);
+        if ($days > 0) {
+            $span = sprintf($this->translator->t('%s, %s'), $span, sprintf($this->translator->plural('%d day', '%d days', $days), $days));
+        }
+        return sprintf($this->translator->t('%s ago'), $span);
     }
 
     /**

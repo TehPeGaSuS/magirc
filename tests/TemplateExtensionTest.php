@@ -56,8 +56,10 @@ final class TemplateExtensionTest extends TestCase
         self::assertSame('3 days ago', $e->ago(time() - 3 * 86400 - 10));
         self::assertSame('2 months ago', $e->ago(time() - 65 * 86400));
         self::assertSame('11 months ago', $e->ago(time() - 362 * 86400), 'no "12 months ago" just before a year');
-        self::assertSame('1 year ago', $e->ago(time() - 400 * 86400));
-        self::assertSame('10 years ago', $e->ago(time() - 3895 * 86400), 'rather than "129 months ago"');
+        $ago = static fn (string $modify): int => (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->modify($modify)->getTimestamp();
+        self::assertSame('1 year, 34 days ago', $e->ago($ago('-1 year -34 days')));
+        self::assertSame('2 years ago', $e->ago($ago('-2 years -1 hour')));
+        self::assertSame('10 years, 243 days ago', $e->ago($ago('-10 years -243 days')), 'calendar years, rather than "129 months ago"');
     }
 
     public function testIrcStrip(): void
