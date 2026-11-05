@@ -125,22 +125,39 @@ final class TemplateExtension extends AbstractExtension
         return preg_replace('/[\x02\x0f\x11\x16\x1d\x1e\x1f]/', '', $text) ?? $text;
     }
 
-    /** "3d 4h", "12m", "45s" */
-    public function duration(int|float|null $seconds): string
+    /**
+     * Compact time from $time to $now for table columns: the two largest
+     * calendar units, "1mo 12d", "5d 3h", "2h 10m", "45s". The unit letters
+     * are translatable; see doc/TRANSLATING.md.
+     */
+    public function duration(int|null $time, int|null $now = null): string
     {
-        $s = (int) ($seconds ?? 0);
-        if ($s < 60) {
-            return $s . 's';
+        $now ??= time();
+        $seconds = max(0, $now - (int) $time);
+        if (!$time || $seconds < 60) {
+            // translators: compact unit, seconds ("45s"). See "Units and abbreviations" in doc/TRANSLATING.md.
+            return sprintf($this->translator->t('%ds'), $seconds);
         }
-        $parts = [];
-        foreach (['d' => 86400, 'h' => 3600, 'm' => 60] as $unit => $size) {
-            if ($s >= $size) {
-                $parts[] = intdiv($s, $size) . $unit;
-                $s %= $size;
-            }
-            if (count($parts) === 2) {
-                break;
-            }
+        [$from, $to] = $this->calendarPair((int) $time, $now);
+        $d = $from->diff($to);
+        $units = [
+            // translators: compact unit, years ("1y 2mo"). See "Units and abbreviations" in doc/TRANSLATING.md.
+            [$d->y, $this->translator->t('%dy')],
+            // translators: compact unit, months ("1mo 12d"); must differ from minutes. See doc/TRANSLATING.md.
+            [$d->m, $this->translator->t('%dmo')],
+            // translators: compact unit, days ("5d 3h"). See doc/TRANSLATING.md.
+            [$d->d, $this->translator->t('%dd')],
+            // translators: compact unit, hours ("2h 10m"). See doc/TRANSLATING.md.
+            [$d->h, $this->translator->t('%dh')],
+            // translators: compact unit, minutes ("2h 10m"); must differ from months. See doc/TRANSLATING.md.
+            [$d->i, $this->translator->t('%dm')],
+        ];
+        while ($units[0][0] === 0) {
+            array_shift($units);
+        }
+        $parts = [sprintf($units[0][1], $units[0][0])];
+        if (isset($units[1]) && $units[1][0] > 0) {
+            $parts[] = sprintf($units[1][1], $units[1][0]);
         }
         return implode(' ', $parts);
     }

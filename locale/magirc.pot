@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: MagIRC\n"
-"POT-Creation-Date: 2026-11-05 00:12+0000\n"
+"POT-Creation-Date: 2026-11-05 00:21+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -596,6 +596,36 @@ msgstr ""
 
 #: src/Web/ErrorHandler.php
 msgid "The page could not be built."
+msgstr ""
+
+#. compact unit, seconds ("45s"). See "Units and abbreviations" in doc/TRANSLATING.md.
+#: src/Web/TemplateExtension.php
+msgid "%ds"
+msgstr ""
+
+#. compact unit, years ("1y 2mo"). See "Units and abbreviations" in doc/TRANSLATING.md.
+#: src/Web/TemplateExtension.php
+msgid "%dy"
+msgstr ""
+
+#. compact unit, months ("1mo 12d"); must differ from minutes. See doc/TRANSLATING.md.
+#: src/Web/TemplateExtension.php
+msgid "%dmo"
+msgstr ""
+
+#. compact unit, days ("5d 3h"). See doc/TRANSLATING.md.
+#: src/Web/TemplateExtension.php
+msgid "%dd"
+msgstr ""
+
+#. compact unit, hours ("2h 10m"). See doc/TRANSLATING.md.
+#: src/Web/TemplateExtension.php
+msgid "%dh"
+msgstr ""
+
+#. compact unit, minutes ("2h 10m"); must differ from months. See doc/TRANSLATING.md.
+#: src/Web/TemplateExtension.php
+msgid "%dm"
 msgstr ""
 
 #: src/Web/TemplateExtension.php

@@ -85,8 +85,18 @@ final class TemplateExtensionTest extends TestCase
     public function testDuration(): void
     {
         $e = $this->ext('');
-        self::assertSame('45s', $e->duration(45));
-        self::assertSame('2m', $e->duration(150));
-        self::assertSame('1d 2h', $e->duration(86400 + 7200 + 60));
+        $now = (new \DateTimeImmutable('2026-11-05 12:00:00', new \DateTimeZone('UTC')))->getTimestamp();
+        $at = static fn (string $date): int => (new \DateTimeImmutable($date, new \DateTimeZone('UTC')))->getTimestamp();
+        self::assertSame('45s', $e->duration($now - 45, $now));
+        self::assertSame('2m', $e->duration($now - 150, $now));
+        self::assertSame('1d 2h', $e->duration($now - 86400 - 7200 - 60, $now));
+        self::assertSame('5d', $e->duration($now - 5 * 86400 - 30, $now), 'a zero second unit is left out');
+        self::assertSame('1mo 12d', $e->duration($at('2026-09-24 08:00'), $now));
+        self::assertSame('1y 2mo', $e->duration($at('2025-09-01 12:00'), $now));
+
+        $pt = new TemplateExtension(new Services(Config::fromArray([]), dirname(__DIR__)), Translator::load(dirname(__DIR__) . '/locale', 'pt_PT'));
+        self::assertSame('1m 12d', $pt->duration($at('2026-09-24 08:00'), $now));
+        self::assertSame('2h 10min', $pt->duration($at('2026-11-05 09:50'), $now));
+        self::assertSame('1a 2m', $pt->duration($at('2025-09-01 12:00'), $now));
     }
 }

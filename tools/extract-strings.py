@@ -9,6 +9,8 @@ Recognised forms:
   templates:  'text'|t   __('text')   _n('one', 'many', n)
   PHP:        ->t('text')   ->plural('one', 'many', n)   and the
               ['%d x ago', '%d xs ago'] pairs in TemplateExtension::ago()
+  Notes:      a "// translators: ..." comment on the line above a PHP ->t()
+              call is written to the .pot as a "#." note for translators
 """
 import glob
 import re
@@ -21,6 +23,7 @@ OUT = f"{ROOT}/locale/magirc.pot"
 
 STR = r"'((?:[^'\\]|\\.)*)'"
 entries: "OrderedDict[tuple, set]" = OrderedDict()
+notes: "dict[tuple, str]" = {}  # "// translators: ..." comments, written as "#." lines
 
 
 def add(msgid: str, plural: str | None, src: str) -> None:
@@ -42,6 +45,10 @@ for f in sorted(glob.glob(f"{ROOT}/src/**/*.php", recursive=True)):
     rel = f[len(ROOT) + 1:]
     for m in re.finditer(r"->t\(" + STR + r"\)", text):
         add(m.group(1), None, rel)
+        # A "// translators:" comment on the line above becomes a note in the .pot.
+        above = text[:text.rfind("\n", 0, m.start())].rsplit("\n", 1)[-1].strip()
+        if above.startswith("// translators:"):
+            notes[(m.group(1).replace("\\'", "'"), None)] = above[len("// translators:"):].strip()
     for m in re.finditer(r"->plural\(" + STR + r",\s*" + STR, text):
         add(m.group(1), m.group(2), rel)
     for m in re.finditer(r"\[" + STR + r", " + STR + r"\]\]", text):  # ago() unit pairs
@@ -75,6 +82,8 @@ msgstr ""
 
 ''')
     for (msgid, plural), sources in entries.items():
+        if (msgid, plural) in notes:
+            out.write("#. " + notes[(msgid, plural)] + "\n")
         out.write("#: " + " ".join(sorted(sources)) + "\n")
         out.write(f"msgid {q(msgid)}\n")
         if plural:

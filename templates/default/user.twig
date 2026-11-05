@@ -8,7 +8,7 @@
 <dl class="props">
   <div><dt>{{ 'Host'|t }}</dt><dd class="mono">{{ user.ident }}@{{ user.vhost ?? user.chost ?? user.host }}</dd></div>
   <div><dt>{{ 'Server'|t }}</dt><dd>{% if user.server_hidden %}{{ user.server }}{% else %}<a href="{{ url_for('server', {server: user.server}) }}">{{ user.server }}</a>{% endif %}</dd></div>
-  <div><dt>{{ 'Online since'|t }}</dt><dd>{{ user.signon|datetime }} <span class="muted">({{ (snapshot_time - user.signon)|duration }})</span></dd></div>
+  <div><dt>{{ 'Online since'|t }}</dt><dd>{{ user.signon|datetime }} <span class="muted">({{ user.signon|duration(snapshot_time) }})</span></dd></div>
   {% if cfg.geoip %}<div><dt>{{ 'Country'|t }}</dt><dd>{{ flag(country.code) }} {{ country.name ?: 'Unknown'|t }}</dd></div>{% endif %}
   <div><dt>{{ 'Account'|t }}</dt><dd>{% if user.account %}{{ user.account.display }}{% if user.account.opertype %} <span class="muted">({{ user.account.opertype }})</span>{% endif %}{% else %}<span class="muted">{{ 'not logged in'|t }}</span>{% endif %}</dd></div>
   <div><dt>{{ 'Connection'|t }}</dt><dd>{{ user.tls ? 'TLS'|t : 'plain text'|t }}{% if user.fingerprint %} <span class="muted small mono">{{ user.fingerprint }}</span>{% endif %}</dd></div>
